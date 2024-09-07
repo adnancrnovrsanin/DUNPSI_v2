@@ -1,0 +1,27 @@
+<div class="space-y-2">
+  <label
+    [htmlFor]="name"
+    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+    >{{ label }}</label
+  >
+  <input
+    [type]="type"
+    [class.is-invalid]="control.touched && control.invalid"
+    class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+    [placeholder]="placeholder"
+    [formControl]="control"
+  />
+  @if (control.errors?.['minlength']) {
+  <div class="invalid-feedback">
+    {{ label }} must be at least
+    {{control.errors?.['minlength'].requiredLength}} characters
+  </div>
+  } @if (control.errors?.['maxlength']) {
+  <div class="invalid-feedback">
+    {{ label }} must be at most
+    {{control.errors?.['maxlength'].requiredLength}} characters
+  </div>
+  } @if (control.errors?.['notMatching']) {
+  <div class="invalid-feedback">Passwords do not match</div>
+  }
+</div>

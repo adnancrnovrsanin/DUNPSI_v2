@@ -1,0 +1,29 @@
+<div
+  class="w-full grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] place-items-center gap-5 p-8 cursor-pointer"
+>
+  <h1 class="text-2xl text-slate-500 dark:text-gray-400">
+    Projects requested by clients:
+  </h1>
+  @if (projectRequests().length === 0) {
+  <h1 class="text-lg text-slate-500 dark:text-gray-400 place-self-start">
+    Nothing here.
+  </h1>
+  } @else { @for (request of projectRequests(); track $index) {
+  <div
+    (click)="link(request)"
+    class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
+  >
+    <h5
+      class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
+    >
+      {{ request.projectName }}
+    </h5>
+    <p class="font-normal text-gray-700 dark:text-gray-400">
+      Due date: {{ request.dueDate.toLocaleDateString() }}
+    </p>
+    <p class="font-normal text-gray-700 dark:text-gray-400">
+      Requested by: {{ request.client.companyName }}
+    </p>
+  </div>
+  } }
+</div>

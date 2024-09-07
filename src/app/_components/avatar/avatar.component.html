@@ -1,0 +1,43 @@
+@if (user) { @if (user.profileImageUrl) {
+<div
+  class="relative flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+>
+  <span class="sr-only">Open user menu</span>
+  <img
+    class="w-8 h-8 rounded-full"
+    [src]="user.profileImageUrl"
+    alt="user photo"
+  />
+  @if (isOnline()) {
+  <span
+    class="top-0 start-7 absolute w-3.5 h-3.5 bg-green-500 border-2 border-white dark:border-gray-800 rounded-full"
+  ></span>
+  }
+</div>
+} @else if (user.name && user.surname) {
+<div
+  class="relative inline-flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full dark:bg-gray-600"
+>
+  <span class="font-medium text-gray-600 dark:text-gray-300">{{
+    getNameInitials()
+  }}</span>
+  @if (isOnline()) {
+  <span
+    class="top-0 start-7 absolute w-3.5 h-3.5 bg-green-500 border-2 border-white dark:border-gray-800 rounded-full"
+  ></span>
+  }
+</div>
+} @else {
+<div class="relative w-10 h-10 bg-gray-100 rounded-full dark:bg-gray-600">
+  <img
+    class="w-10 h-10 rounded-full"
+    src="/assets/profilePlaceholder.jpg"
+    alt="recipient photo"
+  />
+  @if (isOnline()) {
+  <span
+    class="top-0 start-7 absolute w-3.5 h-3.5 bg-green-500 border-2 border-white dark:border-gray-800 rounded-full"
+  ></span>
+  }
+</div>
+} }
