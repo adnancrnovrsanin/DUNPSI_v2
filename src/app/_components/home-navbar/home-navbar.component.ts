@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { AccountService } from '../../_services/account.service';
+import { ImageService } from '../../_services/image.service';
 
 @Component({
   selector: 'app-home-navbar',
@@ -10,7 +11,11 @@ import { AccountService } from '../../_services/account.service';
   styleUrl: './home-navbar.component.scss',
 })
 export class HomeNavbarComponent {
-  constructor(public accountService: AccountService, private router: Router) {}
+  constructor(
+    public accountService: AccountService,
+    private router: Router,
+    public imageService: ImageService
+  ) {}
 
   goToDashboard() {
     this.router.navigate(['/dashboard', this.accountService.currentUser()?.id]);

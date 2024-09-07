@@ -12,6 +12,7 @@ import { projectRequestDetailedResolver } from './_resolvers/project-request-det
 import { ProjectRequestDetailsComponent } from './_screens/project-request-details/project-request-details.component';
 import { ProjectManagerRequestsComponent } from './_screens/project-manager-requests/project-manager-requests.component';
 import { ProjectManagerRequestDetailsComponent } from './_screens/project-manager-request-details/project-manager-request-details.component';
+import { ClientProjectsComponent } from './_screens/client-projects/client-projects.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -23,6 +24,7 @@ export const routes: Routes = [
     children: [
       { path: 'dashboard/:id', component: DashboardComponent },
       { path: 'messages', component: MessagesComponent },
+      { path: 'projects', component: ClientProjectsComponent },
       { path: 'projects/requests', component: ProjectsRequestsComponent },
       {
         path: 'projects/requests/:id',

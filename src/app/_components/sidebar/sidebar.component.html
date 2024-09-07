@@ -10,7 +10,7 @@
         <button
           (click)="navigateToLink(item.link)"
           [ngClass]="{
-            'bg-gray-200 dark:bg-gray-600': activeRoute() === item.keyword
+            'bg-gray-200 dark:bg-gray-600': router.url.includes(item.keyword),
           }"
           class="w-full flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group cursor-pointer"
         >

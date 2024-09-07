@@ -7,10 +7,7 @@ import {
   Signal,
   WritableSignal,
 } from '@angular/core';
-import {
-  NavigationEnd,
-  Router,
-} from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { AccountService } from '../../_services/account.service';
 import { ProjectsService } from '../../_services/projects.service';
 import { MessageService } from '../../_services/message.service';
@@ -50,19 +47,12 @@ interface SidebarItem {
 })
 export class SidebarComponent implements OnInit {
   constructor(
-    private router: Router,
+    public router: Router,
     private accountService: AccountService,
     private projectsService: ProjectsService,
     private messageService: MessageService,
     public projectService: ProjectService
-  ) {
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        this.setActiveRoute();
-      }
-    });
-    this.setActiveRoute();
-  }
+  ) { }
 
   activeRoute: WritableSignal<string> = signal('');
   requestsCount: Signal<number> = computed(() => {
@@ -189,34 +179,8 @@ export class SidebarComponent implements OnInit {
     this.getUnreadMessagesCount();
   }
 
-  goToDashboard() {
-    this.router.navigate([
-      `/dashboard/${this.accountService.currentUser()?.id}`,
-    ]);
-  }
-
-  goToMessages() {
-    this.router.navigate(['/messages']);
-  }
-
-  goToProjectRequests() {
-    this.router.navigate(['/projects/requests']);
-  }
-
-  goToProjectManagerRequests() {
-    this.router.navigate(['/projects/manager/requests']);
-  }
-
   navigateToLink(link: string) {
     this.router.navigate([link]);
-  }
-
-  setActiveRoute() {
-    const url = this.router.url;
-    if (url.includes('dashboard')) this.activeRoute.set('dashboard');
-    if (url.includes('messages')) this.activeRoute.set('messages');
-    if (url.includes('projects/requests'))
-      this.activeRoute.set('projects/requests');
   }
 
   getUnreadMessagesCount() {

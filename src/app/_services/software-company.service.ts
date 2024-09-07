@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal, WritableSignal } from '@angular/core';
 import {
   SoftwareCompany,
   SoftwareCompanyDto,
@@ -15,8 +15,8 @@ import { environment } from '../../environments/environment.development';
 })
 export class SoftwareCompanyService {
   baseUrl = environment.apiUrl;
-  currentSoftwareCompany: SoftwareCompany | null = null;
-  companyProjects: Project[] = [];
+  currentSoftwareCompany: WritableSignal<SoftwareCompany | null> = signal(null);
+  companyProjects: WritableSignal<Project[]> = signal([]);
 
   constructor(
     private http: HttpClient,
@@ -45,26 +45,28 @@ export class SoftwareCompanyService {
       })),
     };
 
-    this.currentSoftwareCompany = company;
-    this.router.navigateByUrl('/projects');
+    this.currentSoftwareCompany.set(company);
+    this.getCompanyProjects();
   }
 
   getCompanyProjects() {
-    if (!this.currentSoftwareCompany) return;
+    if (!this.currentSoftwareCompany()) return;
 
     this.http
       .get<ProjectDto[]>(
-        `${this.baseUrl}softwareCompany/projects/${this.currentSoftwareCompany.id}`
+        `${this.baseUrl}softwareCompany/projects/${
+          this.currentSoftwareCompany()?.id
+        }`
       )
       .subscribe({
-        next: (projects: ProjectDto[]) => {
-          console.log(projects);
-          this.companyProjects.push(
-            ...projects.map((project) => ({
+        next: (projectsDto: ProjectDto[]) => {
+          this.companyProjects.update((softwareProjects) => [
+            ...softwareProjects,
+            ...projectsDto.map((project) => ({
               ...project,
               dueDate: new Date(project.dueDate),
-            }))
-          );
+            })),
+          ]);
         },
         error: console.log,
       });
@@ -89,7 +91,7 @@ export class SoftwareCompanyService {
   }
 
   clear() {
-    this.currentSoftwareCompany = null;
-    this.companyProjects = [];
+    this.currentSoftwareCompany.set(null);
+    this.companyProjects.set([]);
   }
 }
