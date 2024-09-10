@@ -8,6 +8,8 @@ import { Role, User } from '../_models/user';
 import { ProjectDto } from '../_models/softwareProject';
 import { Subscription } from 'rxjs';
 import { ProjectsService } from './projects.service';
+import { TeamService } from './team.service';
+import { Message } from '../_models/message';
 
 @Injectable({
   providedIn: 'root',
@@ -22,7 +24,8 @@ export class ProfileService {
     private http: HttpClient,
     private projectService: ProjectService,
     private toastr: ToastrService,
-    private projectsService: ProjectsService
+    private projectsService: ProjectsService,
+    private teamService: TeamService
   ) {}
 
   getDeveloper(userId: string) {
@@ -77,6 +80,9 @@ export class ProfileService {
             `${this.baseUrl}projectmanager/current-project/${projectManager.id}`
           );
           this.projectsService.getManagerProjectRequests(projectManager.id);
+          if (projectManager.currentTeamId) {
+            this.teamService.getTeam(projectManager.currentTeamId);
+          }
         }),
     };
 
@@ -107,5 +113,83 @@ export class ProfileService {
       },
       error: (err) => this.toastr.error(err.error),
     });
+  }
+
+  getUserFromProjectManager(
+    projectManager: ProjectManager | null | undefined
+  ): User {
+    if (!projectManager) {
+      return {
+        id: '',
+        email: '',
+        name: '',
+        surname: '',
+        profileImageUrl: null,
+        role: Role.PROJECT_MANAGER,
+        photos: [],
+        token: '',
+      };
+    }
+    return {
+      id: projectManager.appUserId,
+      email: projectManager.email,
+      name: projectManager.name,
+      surname: projectManager.surname,
+      profileImageUrl: projectManager.profileImageUrl ?? null,
+      role: Role.PROJECT_MANAGER,
+      photos: [],
+      token: '',
+    };
+  }
+
+  getUserFromDeveloper(developer: Developer | null): User {
+    if (!developer) {
+      return {
+        id: '',
+        email: '',
+        name: '',
+        surname: '',
+        profileImageUrl: null,
+        role: Role.DEVELOPER,
+        photos: [],
+        token: '',
+      };
+    }
+    return {
+      id: developer.appUserId,
+      email: developer.email,
+      name: developer.name,
+      surname: developer.surname,
+      profileImageUrl: developer.profileImageUrl ?? null,
+      role: Role.DEVELOPER,
+      photos: [],
+      token: '',
+    };
+  }
+
+  getUserFromRecipient(message: Message): User {
+    return {
+      id: message.recipientId.toString(),
+      email: message.recipientEmail,
+      name: '',
+      surname: '',
+      role: Role.SOFTWARE_COMPANY,
+      profileImageUrl: message.recipientPhotoUrl,
+      photos: [],
+      token: '',
+    };
+  }
+
+  getUserFromSender(message: Message): User {
+    return {
+      id: message.senderId.toString(),
+      email: message.senderEmail,
+      name: '',
+      surname: '',
+      role: Role.SOFTWARE_COMPANY,
+      profileImageUrl: message.senderPhotoUrl,
+      photos: [],
+      token: '',
+    };
   }
 }

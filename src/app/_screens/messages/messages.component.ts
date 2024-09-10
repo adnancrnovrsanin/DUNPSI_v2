@@ -29,6 +29,7 @@ import { AvatarComponent } from '../../_components/avatar/avatar.component';
 import { map, Observable, of, startWith } from 'rxjs';
 import { UserSearchAutocompleteComponent } from '../../_components/user-search-autocomplete/user-search-autocomplete.component';
 import { ToastrService } from 'ngx-toastr';
+import { ProfileService } from '../../_services/profile.service';
 
 @Component({
   selector: 'app-messages',
@@ -104,36 +105,11 @@ export class MessagesComponent implements OnInit, OnDestroy {
     return this.pagination()?.totalItems ?? 0;
   }
 
-  getUserFromRecipient(message: Message): User {
-    return {
-      id: message.recipientId.toString(),
-      email: message.recipientEmail,
-      name: '',
-      surname: '',
-      role: Role.SOFTWARE_COMPANY,
-      profileImageUrl: message.recipientPhotoUrl,
-      photos: [],
-      token: '',
-    };
-  }
-
-  getUserFromSender(message: Message): User {
-    return {
-      id: message.senderId.toString(),
-      email: message.senderEmail,
-      name: '',
-      surname: '',
-      role: Role.SOFTWARE_COMPANY,
-      profileImageUrl: message.senderPhotoUrl,
-      photos: [],
-      token: '',
-    };
-  }
-
   constructor(
     private messageService: MessageService,
     private accountService: AccountService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    public profileService: ProfileService
   ) {}
 
   ngOnInit(): void {

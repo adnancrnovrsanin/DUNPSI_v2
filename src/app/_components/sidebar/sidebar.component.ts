@@ -20,7 +20,11 @@ import {
   lucideMessageSquareMore,
   lucideFileQuestion,
   lucideHistory,
+  lucideCircleUserRound,
+  lucideList,
 } from '@ng-icons/lucide';
+import { TeamService } from '../../_services/team.service';
+import { ProfileService } from '../../_services/profile.service';
 
 interface SidebarItem {
   title: string;
@@ -42,6 +46,8 @@ interface SidebarItem {
       lucideMessageSquareMore,
       lucideFileQuestion,
       lucideHistory,
+      lucideCircleUserRound,
+      lucideList,
     }),
   ],
 })
@@ -49,10 +55,12 @@ export class SidebarComponent implements OnInit {
   constructor(
     public router: Router,
     private accountService: AccountService,
+    private profileService: ProfileService,
     private projectsService: ProjectsService,
     private messageService: MessageService,
-    public projectService: ProjectService
-  ) { }
+    public projectService: ProjectService,
+    private teamService: TeamService
+  ) {}
 
   activeRoute: WritableSignal<string> = signal('');
   requestsCount: Signal<number> = computed(() => {
@@ -96,10 +104,26 @@ export class SidebarComponent implements OnInit {
           keyword: 'dashboard',
         },
         {
-          title: 'Current Project',
+          title: currentProject
+            ? `${currentProject.name} Board`
+            : 'Current Project Board',
           link: currentProject ? `/projects/${currentProject.id}` : '',
           icon: 'lucideSquareKanban',
           keyword: 'projects',
+        },
+        {
+          title: 'Requirements',
+          link: '/requirements',
+          icon: 'lucideList',
+          keyword: 'requirements',
+        },
+        {
+          title: 'Manage team',
+          link: `/teams/${
+            this.profileService.currentProjectManager()?.currentTeamId
+          }`,
+          icon: 'lucideCircleUserRound',
+          keyword: 'team',
         },
         {
           title: 'Messages',
@@ -113,13 +137,20 @@ export class SidebarComponent implements OnInit {
           icon: 'lucideFileQuestion',
           keyword: 'requests',
         },
+
         {
           title: 'Project History',
           link: '/projects/manager/history',
           icon: 'lucideHistory',
           keyword: 'history',
         },
-      ];
+      ].filter(
+        (item) =>
+          !(
+            ['Current Project', 'Manage team'].includes(item.title) &&
+            !currentProject
+          )
+      );
     }
 
     if (currentUser.role === Role.PRODUCT_MANAGER) {

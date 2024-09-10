@@ -14,6 +14,9 @@ export class AvatarComponent {
   @HostBinding('data-dropdown-toggle') dropdownToggle = '';
 
   @Input() user: User | null = null;
+  @Input() height = 10;
+  @Input() width = 10;
+  @Input() showStatus = true;
 
   constructor(private presenceService: PresenceService) {}
 

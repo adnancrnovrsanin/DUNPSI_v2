@@ -1,19 +1,17 @@
-import { NgStyle } from '@angular/common';
 import { Component, Input, Self } from '@angular/core';
 import { FormControl, NgControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-text-input',
+  selector: 'app-textarea-input',
   standalone: true,
-  imports: [ReactiveFormsModule, NgStyle],
-  templateUrl: './text-input.component.html',
-  styleUrl: './text-input.component.scss',
+  imports: [ReactiveFormsModule],
+  templateUrl: './textarea-input.component.html',
+  styleUrl: './textarea-input.component.scss',
 })
-export class TextInputComponent {
+export class TextareaInputComponent {
   @Input() label = '';
   @Input() placeholder = '';
   @Input() name = '';
-  @Input() type = 'text';
 
   constructor(@Self() public ngControl: NgControl) {
     this.ngControl.valueAccessor = this;

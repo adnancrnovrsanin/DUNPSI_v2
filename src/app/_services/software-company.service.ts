@@ -17,12 +17,15 @@ export class SoftwareCompanyService {
   baseUrl = environment.apiUrl;
   currentSoftwareCompany: WritableSignal<SoftwareCompany | null> = signal(null);
   companyProjects: WritableSignal<Project[]> = signal([]);
+  loading: WritableSignal<boolean> = signal(false);
 
   constructor(
     private http: HttpClient,
     private toastr: ToastrService,
     private router: Router
-  ) {}
+  ) {
+    this.getCompanyProjects();
+  }
 
   getCompanyByEmail(email: string) {
     return this.http
@@ -62,10 +65,12 @@ export class SoftwareCompanyService {
         next: (projectsDto: ProjectDto[]) => {
           this.companyProjects.update((softwareProjects) => [
             ...softwareProjects,
-            ...projectsDto.map((project) => ({
-              ...project,
-              dueDate: new Date(project.dueDate),
-            })),
+            ...projectsDto
+              .filter((pd) => !softwareProjects.some((sp) => sp.id === pd.id))
+              .map((project) => ({
+                ...project,
+                dueDate: new Date(project.dueDate),
+              })),
           ]);
         },
         error: console.log,
@@ -73,6 +78,7 @@ export class SoftwareCompanyService {
   }
 
   sendInitialProjectRequest(projectRequest: CreateInitialProjectRequest) {
+    this.loading.set(true);
     return this.http
       .post<void>(
         this.baseUrl + 'softwareproject/initial-request',
@@ -81,11 +87,14 @@ export class SoftwareCompanyService {
       .subscribe({
         next: () => {
           this.toastr.success('Project request sent');
+
           this.router.navigateByUrl('/');
+          this.loading.set(false);
         },
         error: (error) => {
           this.toastr.error(error);
           console.log(error);
+          this.loading.set(false);
         },
       });
   }

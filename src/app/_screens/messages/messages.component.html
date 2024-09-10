@@ -97,11 +97,15 @@
               </th>
               <td class="px-6 py-4 flex items-center space-x-2">
                 @if (container() === 'Outbox') {
-                <app-avatar [user]="getUserFromRecipient(message)" />
-                <strong>{{ message.recipientEmail | titlecase }}</strong>
+                <app-avatar
+                  [user]="profileService.getUserFromRecipient(message)"
+                />
+                <strong>{{ message.recipientEmail }}</strong>
                 } @else {
-                <app-avatar [user]="getUserFromSender(message)" />
-                <strong>{{ message.senderEmail | titlecase }}</strong>
+                <app-avatar
+                  [user]="profileService.getUserFromSender(message)"
+                />
+                <strong>{{ message.senderEmail }}</strong>
                 }
               </td>
               <td class="px-6 py-4">

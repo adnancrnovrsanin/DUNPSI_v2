@@ -1,0 +1,53 @@
+<div class="p-8 flex flex-col gap-4">
+  <h1 class="text-2xl text-slate-500 dark:text-gray-400">
+    Requirements on hold
+  </h1>
+  @if (requirements().length === 0) {
+  <h1 class="text-lg text-slate-500 dark:text-gray-400 place-self-start">
+    Nothing here.
+  </h1>
+  } @else { @for (requirement of requirements(); track $index) {
+  <div
+    class="w-full flex justify-between p-4 border border-[#0f3490] rounded-md my-4"
+  >
+    <div class="flex flex-col">
+      <h4 class="text-xl text-slate-500 dark:text-gray-400">
+        {{ requirement.name }}
+      </h4>
+      <p class="text-slate-500 dark:text-gray-400">
+        {{ requirement.description }}
+      </p>
+    </div>
+
+    @if (accountService.currentUser()?.role === 'SOFTWARE_COMPANY') {
+    <div class="buttonGroup">
+      <button
+        class="text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800"
+        (click)="updateRequirementStatus(requirement.id, 'APPROVED')"
+      >
+        Approve
+      </button>
+      <button
+        class="text-yellow-400 hover:text-white border border-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-yellow-300 dark:text-yellow-300 dark:hover:text-white dark:hover:bg-yellow-400 dark:focus:ring-yellow-900"
+        (click)="updateRequirementStatus(requirement.id, 'CHANGES_REQUIRED')"
+      >
+        Changes required
+      </button>
+      <button
+        class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900"
+        (click)="updateRequirementStatus(requirement.id, 'REJECTED')"
+      >
+        Reject
+      </button>
+    </div>
+    } @if (accountService.currentUser()?.role === 'PROJECT_MANAGER') {
+    <button
+      type="button"
+      class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+    >
+      Edit
+    </button>
+    }
+  </div>
+  } }
+</div>

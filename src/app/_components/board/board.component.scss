@@ -1,0 +1,146 @@
+:host {
+    width: 100%;
+}
+
+// .buttonSection {
+//     width: 100%;
+//     display: flex;
+//     justify-content: space-between;
+// }
+
+// .bodyContainer {
+//     width: fit-content;
+//     margin-inline: auto;
+//     display: flex;
+//     flex-direction: column;
+//     gap: 2rem;
+// }
+
+// .dropListGroup {
+//     margin-inline: auto;
+//     display: flex;
+//     justify-content: center;
+// }
+
+// .boardColumnContainer {
+//     width: 250px;
+//     max-width: 100%;
+//     margin: 0 25px 25px 0;
+//     display: inline-block;
+//     vertical-align: top;
+// }
+
+// .boardColumnContainer > h2 {
+//     font-size: 1.2rem;
+// }
+
+// .list {
+//     border: solid 1px #0f3490;
+//     min-height: 60px;
+//     background: white;
+//     border-radius: 4px;
+//     overflow: hidden;
+//     display: block;
+// }
+
+// .box {
+//     padding: 20px 10px;
+//     border-bottom: solid 1px #ccc;
+//     color: rgba(0, 0, 0, 0.87);
+//     display: flex;
+//     flex-direction: column;
+//     box-sizing: border-box;
+//     cursor: move;
+//     background: white;
+//     font-size: 14px;
+// }
+
+.cdk-drag-preview {
+    box-sizing: border-box;
+    border-radius: 4px;
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+        0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-placeholder {
+    opacity: 0;
+}
+
+.cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.box:last-child {
+    border: none;
+}
+
+.list.cdk-drop-list-dragging .box:not(.cdk-drag-placeholder) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.done {
+    background-color: rgb(142, 255, 142) !important;
+    animation: taskDoneAnimation 1s ease-in-out;
+}
+
+@keyframes taskDoneAnimation {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+        background-color: rgb(142, 255, 142);
+    }
+}
+
+.list > .box {
+    border-left: 5px solid #0f3490;
+    margin: 10px;
+}
+
+.disabled {
+    background-color: #f5f5f5;
+}
+
+.deletePhaseBtn {
+    width: 100%;
+    margin: 2rem 0;
+}
+
+.disabled:hover {
+    cursor: pointer;
+    background-color: rgb(170, 170, 170);
+}
+
+.developer {
+    display: flex;
+    flex-direction: column;
+    margin: 1rem 0;
+    background-color: #0f3490;
+    color: white;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+}
+
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.selected {
+    background-color: #00B1C8;
+}
+
+.assignBtn {
+    width: 100%;
+    margin: 2rem 0;
+}
+
+.assigned {
+    border-left: 5px solid #00B1C8 !important;
+}
+  

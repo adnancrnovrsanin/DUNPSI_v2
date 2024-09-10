@@ -13,6 +13,9 @@ import { ProjectRequestDetailsComponent } from './_screens/project-request-detai
 import { ProjectManagerRequestsComponent } from './_screens/project-manager-requests/project-manager-requests.component';
 import { ProjectManagerRequestDetailsComponent } from './_screens/project-manager-request-details/project-manager-request-details.component';
 import { ClientProjectsComponent } from './_screens/client-projects/client-projects.component';
+import { ProjectPageComponent } from './_screens/project-page/project-page.component';
+import { TeamComponent } from './_screens/team/team.component';
+import { RequirementsScreenComponent } from './_screens/requirements-screen/requirements-screen.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -25,6 +28,11 @@ export const routes: Routes = [
       { path: 'dashboard/:id', component: DashboardComponent },
       { path: 'messages', component: MessagesComponent },
       { path: 'projects', component: ClientProjectsComponent },
+      {
+        path: 'requirements',
+        component: RequirementsScreenComponent,
+      },
+      { path: 'projects/:id', component: ProjectPageComponent },
       { path: 'projects/requests', component: ProjectsRequestsComponent },
       {
         path: 'projects/requests/:id',
@@ -40,6 +48,7 @@ export const routes: Routes = [
         component: ProjectManagerRequestDetailsComponent,
         resolve: projectRequestDetailedResolver,
       },
+      { path: 'teams/:id', component: TeamComponent },
     ],
   },
   { path: 'login', component: LoginComponent },

@@ -28,11 +28,12 @@ export class ProjectService {
     return this.http
       .get<ProjectDto>(`${this.baseUrl}softwareProject/${id}`)
       .subscribe({
-        next: (project: ProjectDto) =>
+        next: (project: ProjectDto) => {
           this.selectedProject.set({
             ...project,
             dueDate: new Date(project.dueDate),
-          }),
+          });
+        },
         error: (error) => {
           console.log(error);
           this.toastr.error(error);
@@ -57,7 +58,12 @@ export class ProjectService {
             );
           }
           this.selectedProjectPhases.set(
-            projectPhases.sort((a, b) => a.serialNumber - b.serialNumber)
+            projectPhases
+              .filter(
+                (pp) =>
+                  !this.selectedProjectPhases().some((spp) => spp.id === pp.id)
+              )
+              .sort((a, b) => a.serialNumber - b.serialNumber)
           );
         },
         error: (error) => {
@@ -113,7 +119,7 @@ export class ProjectService {
     if (!this.selectedProject) return;
     return this.http.post<Requirement[]>(
       this.baseUrl +
-        'softwareProject/requirements/' +
+        'softwareProject/requirements/project/' +
         this.selectedProject()?.id,
       request
     );

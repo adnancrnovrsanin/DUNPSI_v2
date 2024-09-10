@@ -1,9 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal, WritableSignal } from '@angular/core';
 import { DeveloperAssignmentRequest, Team } from '../_models/team';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { Developer } from '../_models/profiles';
-import { ProjectService } from './project.service';
 import { Rating, RatingDto } from '../_models/rating';
 import { environment } from '../../environments/environment.development';
 
@@ -12,18 +11,17 @@ import { environment } from '../../environments/environment.development';
 })
 export class TeamService {
   baseUrl = environment.apiUrl;
-  selectedTeam: Team | null = null;
+  selectedTeam: WritableSignal<Team | null> = signal(null);
 
   constructor(
     private http: HttpClient,
-    private toastr: ToastrService,
-    private projectService: ProjectService
+    private toastr: ToastrService
   ) {}
 
   getTeam(id: string) {
     this.http.get<Team>(this.baseUrl + 'team/' + id).subscribe({
       next: (team) => {
-        this.selectedTeam = team;
+        this.selectedTeam.set(team);
       },
       error: (error) => {
         console.log(error);
@@ -60,6 +58,6 @@ export class TeamService {
   }
 
   clear() {
-    this.selectedTeam = null;
+    this.selectedTeam.set(null);
   }
 }
