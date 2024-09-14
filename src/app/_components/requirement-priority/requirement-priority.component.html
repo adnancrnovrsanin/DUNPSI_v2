@@ -1,0 +1,32 @@
+@if (priority) { @if (priority === 1) {
+<div class="flex items-center gap-4">
+  <ng-icon
+    name="matKeyboardDoubleArrowDown"
+    class="text-blue-700 text-lg"
+  ></ng-icon>
+  <p class="text-sm text-slate-900 dark:text-white">Very Low</p>
+</div>
+} @else if (priority === 2) {
+<div class="flex items-center gap-4">
+  <ng-icon name="matKeyboardArrowDown" class="text-blue-500 text-lg"></ng-icon>
+  <p class="text-sm text-slate-900 dark:text-white">Low</p>
+</div>
+} @else if (priority === 3) {
+<div class="flex items-center gap-4">
+  <ng-icon name="matEquals" class="text-orange-300 text-lg"></ng-icon>
+  <p class="text-sm text-slate-900 dark:text-white">Medium</p>
+</div>
+} @else if (priority === 4) {
+<div class="flex items-center gap-4">
+  <ng-icon name="matKeyboardArrowUp" class="text-orange-500 text-lg"></ng-icon>
+  <p class="text-sm text-slate-900 dark:text-white">High</p>
+</div>
+} @else if (priority === 5) {
+<div class="flex items-center gap-4">
+  <ng-icon
+    name="matKeyboardDoubleArrowUp"
+    class="text-red-700 text-lg"
+  ></ng-icon>
+  <p class="text-sm text-slate-900 dark:text-white">Very High</p>
+</div>
+} }

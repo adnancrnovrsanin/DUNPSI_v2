@@ -94,6 +94,39 @@
           >
             <div class="grid gap-4 mb-4 sm:grid-cols-2">
               <div class="sm:col-span-2">
+                <select
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  formControlName="requirementType"
+                >
+                  <option selected>Choose a requirement type</option>
+                  @for (type of requirementTypes; track $index) {
+                  <option [value]="type">
+                    <app-requirement-type-icon
+                      [type]="type"
+                    ></app-requirement-type-icon>
+                    {{ type }}
+                  </option>
+                  }
+                </select>
+              </div>
+
+              <div class="sm:col-span-2">
+                <select
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  formControlName="requirementPriority"
+                >
+                  <option selected>Set priority for this requirement</option>
+                  @for (priority of priorityLevels; track $index) {
+                  <option [value]="priority">
+                    <app-requirement-priority
+                      [priority]="priority"
+                    ></app-requirement-priority>
+                  </option>
+                  }
+                </select>
+              </div>
+
+              <div class="sm:col-span-2">
                 <app-text-input
                   [label]="'Requirement name'"
                   [placeholder]="'Enter requirement name'"
@@ -331,13 +364,13 @@
       <div
         cdkDropList
         [cdkDropListData]="projectPhase.requirements"
-        class="min-h-[200px] min-w-[200px] rounded-lg overflow-hidden flex flex-col items-center p-1 border border-slate-200 dark:border-slate-700"
+        class="min-h-[340px] min-w-[200px] rounded-lg overflow-hidden flex flex-col items-center p-1 border border-slate-200 dark:border-slate-700"
         [class.cursor-move]="editMode()"
         [class.cursor-pointer]="!editMode()"
         (cdkDropListDropped)="drop($event)"
       >
         <div
-          class="block w-72 min-h-[180px] p-6 bg-white border border-gray-200 rounded-lg shadow my-1 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
+          class="flex flex-col gap-4 w-72 min-h-[200px] p-6 bg-white border border-gray-200 rounded-lg shadow my-1 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
           *ngFor="let requirement of projectPhase.requirements"
           cdkDrag
           (click)="!editMode() && letRequirementBeClicked(requirement)"
@@ -353,146 +386,309 @@
           <p class="font-normal text-gray-700 dark:text-gray-400">
             {{ truncateText(requirement.description, 100) }}
           </p>
-          <p *ngIf="requirement.assignedDevelopers.length > 0">
-            {{ requirement.assignedDevelopers.length }}
-            {{ getText(requirement.assignedDevelopers.length) }} assigned
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Main modal -->
-<div
-  id="requirement-modal"
-  tabindex="-1"
-  aria-hidden="true"
-  class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
->
-  <div class="relative p-4 w-full max-w-2xl max-h-full">
-    <!-- Modal content -->
-    <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-      <!-- Modal header -->
-      <div
-        class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600"
-      >
-        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-          {{ selectedRequirement()?.name }}
-        </h3>
-        <button
-          type="button"
-          class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-          data-modal-hide="requirement-modal"
-        >
-          <svg
-            class="w-3 h-3"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 14 14"
-          >
-            <path
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-            />
-          </svg>
-          <span class="sr-only">Close modal</span>
-        </button>
-      </div>
-      <!-- Modal body -->
-      <div class="p-4 md:p-5 flex items-start justify-between space-x-4">
-        <div class="flex flex-col">
-          <p class="text-base font-semibold text-gray-900 dark:text-white">
-            Description
-          </p>
-          <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-            {{ selectedRequirement()?.description }}
-          </p>
-        </div>
-        <div class="flex flex-col space-y-4">
-          <div class="flex flex-col space-y-2">
-            <p class="text-xs font-semibold ml-1 text-gray-900 dark:text-white">
-              STATUS
-            </p>
-            <p
-              class="w-64 bg-gray-400 px-4 py-2 text-xs rounded-md leading-relaxed text-gray-500 dark:text-gray-400 dark:bg-gray-800"
-            >
-              {{ selectedRequirement()?.status }}
-            </p>
-          </div>
-
-          <div class="flex flex-col space-y-2">
-            <p class="text-xs font-semibold ml-1 text-gray-900 dark:text-white">
-              REPORTER
-            </p>
-            <div
-              class="flex items-center gap-2 w-64 bg-gray-400 px-4 py-2 text-xs rounded-md leading-relaxed text-gray-500 dark:text-gray-400 dark:bg-gray-800"
-            >
-              <app-avatar
-                [user]="
-                  profileService.getUserFromProjectManager(
-                    projectService.selectedProject()?.assignedTeam?.manager
-                  )
-                "
-                [width]="8"
-                [height]="8"
-                [showStatus]="false"
-              />
-              <p
-                class="text-base leading-relaxed text-gray-500 dark:text-gray-400"
-              >
-                {{
-                  projectService.selectedProject()?.assignedTeam?.manager?.name
-                }}
-                {{
-                  projectService.selectedProject()?.assignedTeam?.manager
-                    ?.surname
-                }}
-              </p>
-            </div>
-          </div>
-
-          <div class="flex flex-col space-y-2">
-            <p class="text-xs font-semibold ml-1 text-gray-900 dark:text-white">
-              ASSIGNED DEVELOPERS
-            </p>
-            @if (assignedDevelopers().length > 0) { @for (developer of
-            selectedRequirement()?.assignedDevelopers; track $index) {
-            <div
-              class="flex items-center gap-2 w-64 bg-gray-400 px-4 py-2 text-xs rounded-md leading-relaxed text-gray-500 dark:text-gray-400 dark:bg-gray-800"
-            >
+          <div class="flex items-center w-full">
+            @if (requirement.assignedDevelopers.length > 0) {
+            <div class="flex -space-x-2 rtl:space-x-reverse">
+              @for (developer of requirement.assignedDevelopers; track $index) {
               <app-avatar
                 [user]="profileService.getUserFromDeveloper(developer)"
+                [showStatus]="false"
                 [width]="8"
                 [height]="8"
-                [showStatus]="false"
               />
-              <p
-                class="text-base leading-relaxed text-gray-500 dark:text-gray-400"
-              >
-                {{ developer.name }} {{ developer.surname }}
-              </p>
+              }
             </div>
-            } } @else {
+            } @else {
             <div
               class="flex items-center gap-2 w-64 bg-gray-400 px-4 py-2 text-xs rounded-md leading-relaxed text-gray-500 dark:text-gray-400 dark:bg-gray-800"
             >
               <p
                 class="text-base leading-relaxed text-gray-500 dark:text-gray-400"
               >
-                No developers assigned to this task
+                Unassigned
               </p>
             </div>
             }
           </div>
+
+          <div class="flex items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+              <app-requirement-type-icon [type]="requirement.type" />
+              <p class="text-xs text-gray-900 dark:text-gray-300">
+                {{
+                  requirement.type === "USER_STORY" ? "STORY" : requirement.type
+                }}
+                -
+                {{ requirement.idNumber }}
+              </p>
+            </div>
+
+            <app-requirement-priority [priority]="requirement.priority" />
+          </div>
         </div>
       </div>
-      <!-- Modal footer -->
-      <div
+    </div>
+  </div>
+
+  <!-- Main modal -->
+  <div
+    id="requirement-modal"
+    tabindex="-1"
+    aria-hidden="true"
+    class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
+  >
+    <div class="relative p-4 w-full max-w-3xl max-h-full">
+      <!-- Modal content -->
+      <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+        <!-- Modal header -->
+        <div
+          class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600"
+        >
+          <div class="flex flex-col items-start gap-4">
+            <div class="flex items-center gap-4">
+              <app-requirement-type-icon [type]="selectedRequirement()?.type" />
+              <p class="text-sm text-gray-900 dark:text-gray-300">
+                {{
+                  selectedRequirement()?.type === "USER_STORY"
+                    ? "STORY"
+                    : selectedRequirement()?.type
+                }}
+                -
+                {{ selectedRequirement()?.idNumber }}
+              </p>
+            </div>
+            <h3 class="text-2xl font-semibold text-gray-900 dark:text-white">
+              {{ selectedRequirement()?.name }}
+            </h3>
+          </div>
+          <button
+            type="button"
+            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+            data-modal-hide="requirement-modal"
+          >
+            <svg
+              class="w-3 h-3"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 14 14"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+              />
+            </svg>
+            <span class="sr-only">Close modal</span>
+          </button>
+        </div>
+        <!-- Modal body -->
+        <div class="p-4 md:p-5 flex flex-col space-y-4">
+          <div class="flex items-start justify-between space-x-4">
+            <div class="flex flex-col">
+              <p class="text-base font-semibold text-gray-900 dark:text-white">
+                Description
+              </p>
+              <p
+                class="text-base leading-relaxed text-gray-500 dark:text-gray-400"
+              >
+                {{ selectedRequirement()?.description }}
+              </p>
+            </div>
+            <div class="flex flex-col space-y-4">
+              <div class="flex flex-col space-y-2">
+                <p
+                  class="text-xs font-semibold ml-1 text-gray-900 dark:text-white"
+                >
+                  STATUS
+                </p>
+                <p
+                  class="w-64 border border-gray-400 px-4 py-2 text-xs rounded-md leading-relaxed text-slate-700 dark:text-gray-400 dark:bg-gray-800 dark:border-none"
+                >
+                  {{ selectedRequirement()?.status }}
+                </p>
+              </div>
+
+              <div class="flex flex-col space-y-2">
+                <p
+                  class="text-xs font-semibold ml-1 text-gray-900 dark:text-white"
+                >
+                  REPORTER
+                </p>
+                <div
+                  class="flex items-center gap-2 w-64 border border-gray-400 px-4 py-2 text-xs rounded-md leading-relaxed dark:text-gray-400 dark:bg-gray-800 dark:border-none"
+                >
+                  <app-avatar
+                    [user]="
+                      profileService.getUserFromProjectManager(
+                        projectService.selectedProject()?.assignedTeam?.manager
+                      )
+                    "
+                    [width]="8"
+                    [height]="8"
+                    [showStatus]="false"
+                  />
+                  <p
+                    class="text-base leading-relaxed text-slate-700 dark:text-gray-400"
+                  >
+                    {{
+                      projectService.selectedProject()?.assignedTeam?.manager
+                        ?.name
+                    }}
+                    {{
+                      projectService.selectedProject()?.assignedTeam?.manager
+                        ?.surname
+                    }}
+                  </p>
+                </div>
+              </div>
+
+              <div class="flex flex-col space-y-2">
+                <p
+                  class="text-xs font-semibold ml-1 text-gray-900 dark:text-white"
+                >
+                  PRIORITY
+                </p>
+                <div
+                  class="flex items-center gap-2 w-64 border border-gray-400 px-4 py-2 text-xs rounded-md leading-relaxed dark:text-gray-400 dark:bg-gray-800 dark:border-none"
+                >
+                  <app-requirement-priority
+                    [priority]="selectedRequirement()?.priority"
+                  ></app-requirement-priority>
+                </div>
+              </div>
+
+              <div class="flex flex-col space-y-2">
+                <p
+                  class="text-xs font-semibold ml-1 text-gray-900 dark:text-white"
+                >
+                  ASSIGNED DEVELOPERS
+                </p>
+                @if (assignedDevelopers().length > 0) { @for (developer of
+                selectedRequirement()?.assignedDevelopers; track $index) {
+                <div
+                  class="flex items-center gap-2 w-64 border border-gray-400 px-4 py-2 text-xs rounded-md leading-relaxed dark:text-gray-400 dark:bg-gray-800 dark:border-none"
+                >
+                  <app-avatar
+                    [user]="profileService.getUserFromDeveloper(developer)"
+                    [width]="8"
+                    [height]="8"
+                    [showStatus]="false"
+                  />
+                  <p
+                    class="text-base leading-relaxed text-slate-700 dark:text-gray-400"
+                  >
+                    {{ developer.name }} {{ developer.surname }}
+                  </p>
+                </div>
+                } } @else {
+                <div
+                  class="flex items-center gap-2 w-64 bg-gray-400 px-4 py-2 text-xs rounded-md leading-relaxed text-gray-500 dark:text-gray-400 dark:bg-gray-800"
+                >
+                  <p
+                    class="text-base leading-relaxed text-gray-500 dark:text-gray-400"
+                  >
+                    Unassigned
+                  </p>
+                </div>
+                }
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label
+              for="query"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >Assign developers to task</label
+            >
+            @if (selectedDeveloper() === null) {
+            <input
+              type="text"
+              id="query"
+              name="query"
+              [(ngModel)]="query"
+              (ngModelChange)="filter()"
+              (focus)="openDropdown()"
+              class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            />
+            } @else if (selectedDeveloper() && selectedDeveloper() !== null) {
+            <div
+              class="flex justify-between items-center w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+            >
+              <div class="flex items-center space-x-4">
+                <app-avatar
+                  [user]="
+                    profileService.getUserFromDeveloper(selectedDeveloper())
+                  "
+                ></app-avatar>
+                <span>{{ selectedDeveloper()?.email }}</span>
+              </div>
+              <div class="flex items-center space-x-4">
+                <button
+                  type="button"
+                  (click)="assignDeveloper()"
+                  class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                >
+                  Assign
+                </button>
+                <button
+                  type="button"
+                  (click)="deselectDeveloper()"
+                  class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                  <span class="sr-only">Close modal</span>
+                </button>
+              </div>
+            </div>
+            }
+          </div>
+
+          <div
+            id="dropdown"
+            #dropdown
+            class="z-10 w-full hidden bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700"
+          >
+            <ul
+              class="py-2 text-sm text-gray-700 dark:text-gray-200"
+              aria-labelledby="dropdown-button"
+            >
+              @for (developer of filteredDevelopers().slice(0, 5); track $index)
+              {
+              <li>
+                <div
+                  (click)="selectDeveloper(developer)"
+                  class="block space-x-4 px-4 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                >
+                  <app-avatar
+                    [user]="profileService.getUserFromDeveloper(developer)"
+                    class="w-8 h-8 rounded-full"
+                  ></app-avatar>
+                  <span>{{ developer.name }} {{ developer.surname }}</span>
+                </div>
+              </li>
+              }
+            </ul>
+          </div>
+        </div>
+        <!-- Modal footer -->
+        <!-- <div
         class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600"
       >
         <button
@@ -509,6 +705,7 @@
         >
           Decline
         </button>
+      </div> -->
       </div>
     </div>
   </div>

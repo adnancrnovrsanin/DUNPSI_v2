@@ -16,9 +16,12 @@ import { ClientProjectsComponent } from './_screens/client-projects/client-proje
 import { ProjectPageComponent } from './_screens/project-page/project-page.component';
 import { TeamComponent } from './_screens/team/team.component';
 import { RequirementsScreenComponent } from './_screens/requirements-screen/requirements-screen.component';
+import { ClientRegisterComponent } from './_screens/client-register/client-register.component';
+import { CompanyProjectsComponent } from './_screens/company-projects/company-projects.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
+  { path: 'register', component: ClientRegisterComponent },
   {
     path: '',
     runGuardsAndResolvers: 'always',
@@ -28,17 +31,18 @@ export const routes: Routes = [
       { path: 'dashboard/:id', component: DashboardComponent },
       { path: 'messages', component: MessagesComponent },
       { path: 'projects', component: ClientProjectsComponent },
+      { path: 'company/projects', component: CompanyProjectsComponent },
       {
         path: 'requirements',
         component: RequirementsScreenComponent,
       },
-      { path: 'projects/:id', component: ProjectPageComponent },
       { path: 'projects/requests', component: ProjectsRequestsComponent },
       {
         path: 'projects/requests/:id',
         component: ProjectRequestDetailsComponent,
         resolve: projectRequestDetailedResolver,
       },
+      { path: 'projects/:id', component: ProjectPageComponent },
       {
         path: 'projects/manager/requests',
         component: ProjectManagerRequestsComponent,

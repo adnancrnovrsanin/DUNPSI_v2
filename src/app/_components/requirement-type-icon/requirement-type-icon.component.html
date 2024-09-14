@@ -1,0 +1,13 @@
+@if (type) { @if (type === 'USER_STORY') {
+<div class="bg-green-500 text-white px-1.5 pt-1 rounded-lg w-fit h-fit">
+  <ng-icon name="matBookmark" class="text-lg"></ng-icon>
+</div>
+} @else if (type === 'BUG') {
+<div class="bg-red-600 text-white px-1.5 pt-1 rounded-lg w-fit h-fit">
+  <ng-icon name="matBugReport" class="text-lg"></ng-icon>
+</div>
+} @else if (type === 'TASK') {
+<div class="bg-blue-600 text-white px-1.5 pt-1 rounded-lg w-fit h-fit">
+  <ng-icon name="matCheck"></ng-icon>
+</div>
+} }

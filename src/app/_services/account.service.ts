@@ -10,6 +10,11 @@ import { map } from 'rxjs';
 import { ProjectsService } from './projects.service';
 import { ProjectService } from './project.service';
 import { TeamService } from './team.service';
+import {
+  CreateSoftwareCompanyCredentials,
+  CreateSoftwareCompanyResponse,
+  SoftwareCompanyDto,
+} from '../_models/softwareCompany';
 
 @Injectable({
   providedIn: 'root',
@@ -79,5 +84,39 @@ export class AccountService {
 
   searchUsers(searchText: string) {
     return this.http.get<User[]>(this.baseUrl + 'account/search/' + searchText);
+  }
+
+  createSoftwareCompany(
+    softwareCompanyCreds: CreateSoftwareCompanyCredentials
+  ) {
+    return this.http
+      .post<CreateSoftwareCompanyResponse>(
+        this.baseUrl + 'account/register-company',
+        softwareCompanyCreds
+      )
+      .pipe(
+        map((response) => {
+          if (response) {
+            this.setCurrentUser(response.user);
+
+            const softwareCompany: SoftwareCompanyDto = {
+              id: response.id,
+              appUserId: response.user.id,
+              representativeName: response.user.name,
+              representativeSurname: response.user.surname,
+              email: response.user.email,
+              companyName: response.companyName,
+              address: response.address,
+              contact: response.contact,
+              web: response.web,
+              currentProjects: [],
+            };
+
+            this.softwareCompanyService.setCurrentSoftwareCompany(
+              softwareCompany
+            );
+          }
+        })
+      );
   }
 }

@@ -115,11 +115,17 @@ export class ProjectService {
     return canItBeFinished;
   }
 
+  getRequirementsByStatus(status: string) {
+    return this.http.get<Requirement[]>(
+      this.baseUrl + 'requirements/' + status
+    );
+  }
+
   getRequirementsOnHold(request: GetRequirementsOnHoldRequest) {
     if (!this.selectedProject) return;
     return this.http.post<Requirement[]>(
       this.baseUrl +
-        'softwareProject/requirements/project/' +
+        'softwareProject/requirements/' +
         this.selectedProject()?.id,
       request
     );

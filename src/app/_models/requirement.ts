@@ -8,6 +8,9 @@ export interface Requirement {
   description: string;
   status: RequirementApproveStatus;
   serialNumber: number;
+  idNumber: number;
+  type: RequirementType;
+  priority: RequirementPriority;
   assignedDevelopers: Developer[];
 }
 
@@ -17,6 +20,8 @@ export interface CreateRequirementRequest {
   description: string;
   status: string;
   serialNumber: number;
+  type: string;
+  priority: number;
 }
 
 export enum RequirementApproveStatus {
@@ -25,6 +30,20 @@ export enum RequirementApproveStatus {
   APPROVED = 'APPROVED',
   CHANGES_REQUIRED = 'CHANGES_REQUIRED',
   REJECTED = 'REJECTED',
+}
+
+export enum RequirementType {
+  USER_STORY = 'USER_STORY',
+  BUG = 'BUG',
+  TASK = 'TASK',
+}
+
+export enum RequirementPriority {
+  VeryLow = 1,
+  Low = 2,
+  Medium = 3,
+  High = 4,
+  VeryHigh = 5,
 }
 
 export interface GetRequirementsOnHoldRequest {

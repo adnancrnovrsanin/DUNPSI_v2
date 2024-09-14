@@ -1,4 +1,3 @@
-import { NG_EVENT_PLUGINS } from '@taiga-ui/event-plugins';
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
@@ -33,7 +32,6 @@ export const appConfig: ApplicationConfig = {
     provideSpinnerConfig({
       type: 'ball-spin',
     }),
-    NG_EVENT_PLUGINS,
     provideAnimationsAsync(),
   ],
 };
