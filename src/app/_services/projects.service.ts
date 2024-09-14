@@ -26,6 +26,10 @@ export class ProjectsService {
     private router: Router,
   ) {}
 
+  getAllProjects() {
+    return this.http.get<ProjectDto[]>(this.baseUrl + 'softwareProject');
+  }
+
   getProjectRequests() {
     return this.http
       .get<InitialProjectRequestDto[]>(

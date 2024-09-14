@@ -7,7 +7,7 @@ import {
   Signal,
   WritableSignal,
 } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { AccountService } from '../../_services/account.service';
 import { ProjectsService } from '../../_services/projects.service';
 import { MessageService } from '../../_services/message.service';
@@ -27,6 +27,7 @@ import {
 } from '@ng-icons/lucide';
 import { TeamService } from '../../_services/team.service';
 import { ProfileService } from '../../_services/profile.service';
+import { truncateText } from '../../_utils/textUtils';
 
 interface SidebarItem {
   title: string;
@@ -109,7 +110,7 @@ export class SidebarComponent implements OnInit {
         },
         {
           title: currentProject
-            ? `${currentProject.name} Board`
+            ? truncateText(`${currentProject.name} Board`, 20)
             : 'Current Project Board',
           link: currentProject ? `/projects/${currentProject.id}` : '',
           icon: 'lucideSquareKanban',
@@ -151,7 +152,7 @@ export class SidebarComponent implements OnInit {
       ].filter(
         (item) =>
           !(
-            ['Current Project', 'Manage team'].includes(item.title) &&
+            ['projects', 'team', 'requirements'].includes(item.keyword) &&
             !currentProject
           )
       );
@@ -166,6 +167,12 @@ export class SidebarComponent implements OnInit {
           keyword: 'dashboard',
         },
         {
+          title: 'All Company Projects',
+          link: `/company/projects`,
+          icon: 'lucideSquareKanban',
+          keyword: 'company/projects',
+        },
+        {
           title: 'Project Requests',
           link: '/projects/requests',
           icon: 'lucideFileQuestion',
@@ -176,6 +183,12 @@ export class SidebarComponent implements OnInit {
           link: '/messages',
           icon: 'lucideMessageSquareMore',
           keyword: 'messages',
+        },
+        {
+          title: 'Requirements',
+          link: '/requirements',
+          icon: 'lucideList',
+          keyword: 'requirements',
         },
       ];
     }

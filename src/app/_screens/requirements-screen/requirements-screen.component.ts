@@ -1,63 +1,118 @@
-import { Component, OnInit, signal, WritableSignal } from '@angular/core';
+import {
+  AfterContentInit,
+  Component,
+  computed,
+  ElementRef,
+  OnInit,
+  Signal,
+  signal,
+  ViewChild,
+  WritableSignal,
+} from '@angular/core';
 import {
   GetRequirementsOnHoldRequest,
   Requirement,
 } from '../../_models/requirement';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { ProjectService } from '../../_services/project.service';
 import { AccountService } from '../../_services/account.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { Project } from '../../_models/softwareProject';
+import { User } from '../../_models/user';
+import { TextInputComponent } from '../../_forms/text-input/text-input.component';
+import { TextareaInputComponent } from '../../_forms/textarea-input/textarea-input.component';
+import { ProfileService } from '../../_services/profile.service';
+
+import { Modal } from 'flowbite';
+import type { ModalOptions, ModalInterface } from 'flowbite';
+import type { InstanceOptions } from 'flowbite';
 
 @Component({
   selector: 'app-requirements-screen',
   standalone: true,
-  imports: [],
+  imports: [TextInputComponent, TextareaInputComponent, ReactiveFormsModule],
   templateUrl: './requirements-screen.component.html',
   styleUrl: './requirements-screen.component.scss',
 })
 export class RequirementsScreenComponent implements OnInit {
-  requirements: WritableSignal<Requirement[]> = signal([]);
+  requirementsForEdit: WritableSignal<Requirement[]> = signal([]);
+  requirementsForApproval: WritableSignal<Requirement[]> = signal([]);
   selectedRequirement: WritableSignal<Requirement | null> = signal(null);
+  loading: WritableSignal<boolean> = signal(false);
 
-  editForm = new FormGroup({
-    name: new FormControl(this.selectedRequirement()?.name ?? '', [
-      Validators.required,
-    ]),
-    description: new FormControl(
-      this.selectedRequirement()?.description ?? '',
-      [Validators.required]
-    ),
+  editForm: Signal<FormGroup> = computed(() => {
+    return new FormGroup({
+      name: new FormControl(this.selectedRequirement()?.name ?? '', [
+        Validators.required,
+      ]),
+      description: new FormControl(
+        this.selectedRequirement()?.description ?? '',
+        [Validators.required]
+      ),
+    });
   });
 
   get name() {
-    return this.editForm.get('name');
+    return this.editForm().get('name');
   }
   get description() {
-    return this.editForm.get('description');
+    return this.editForm().get('description');
   }
+
+  @ViewChild('updateRequirementModal')
+  updateRequirementModal: ElementRef | undefined;
 
   constructor(
     private projectService: ProjectService,
     public accountService: AccountService,
+    private profileService: ProfileService,
     private router: Router,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private elRef: ElementRef
   ) {}
 
   ngOnInit(): void {
     const user = this.accountService.currentUser();
-    const selectedProject = this.projectService.selectedProject();
+    if (!user) return;
 
-    if (!user || !selectedProject) return;
+    if (user.role === 'PROJECT_MANAGER') {
+      const selectedProject = this.projectService.selectedProject();
+      if (!selectedProject) return;
+      this.getRequirementsForProjectManager(selectedProject, user);
+    } else if (user.role === 'PRODUCT_MANAGER') {
+      this.getRequirementsForProductManager(user);
+    }
+  }
 
-    const request: GetRequirementsOnHoldRequest = {
+  getRequirementsForProjectManager(selectedProject: Project, user: User) {
+    const firstReq: GetRequirementsOnHoldRequest = {
       projectId: selectedProject.id ?? '',
-      status: user.role === 'SOFTWARE_COMPANY' ? 'PENDING' : 'CHANGES_REQUIRED',
+      status: 'WAITING_PROJECT_MANAGER_APPROVAL',
     };
 
-    this.projectService.getRequirementsOnHold(request)?.subscribe({
+    this.projectService.getRequirementsOnHold(firstReq)?.subscribe({
       next: (requirements: Requirement[]) => {
-        this.requirements.set(requirements);
+        this.requirementsForApproval.set(requirements);
+      },
+      error: (err: any) => {
+        console.log(err);
+      },
+    });
+
+    const secondReq: GetRequirementsOnHoldRequest = {
+      projectId: selectedProject.id ?? '',
+      status: 'WAITING_PROJECT_MANAGER_CHANGES',
+    };
+
+    this.projectService.getRequirementsOnHold(secondReq)?.subscribe({
+      next: (requirements: Requirement[]) => {
+        this.requirementsForEdit.set(requirements);
       },
       error: (err: any) => {
         console.log(err);
@@ -65,18 +120,51 @@ export class RequirementsScreenComponent implements OnInit {
     });
   }
 
+  getRequirementsForProductManager(user: User) {
+    this.projectService
+      .getRequirementsByStatus('WAITING_PRODUCT_MANAGER_APPROVAL')
+      .subscribe({
+        next: (requirements: Requirement[]) => {
+          this.requirementsForApproval.set(requirements);
+        },
+        error: (err: any) => {
+          console.log(err);
+        },
+      });
+    this.projectService
+      .getRequirementsByStatus('WAITING_PRODUCT_MANAGER_CHANGES')
+      .subscribe({
+        next: (requirements: Requirement[]) => {
+          this.requirementsForEdit.set(requirements);
+        },
+        error: (err: any) => {
+          console.log(err);
+        },
+      });
+  }
+
   updateRequirementStatus(requirementId: string, status: string) {
     const selectedProject = this.projectService.selectedProject();
-    if (!selectedProject) return;
+    const user = this.accountService.currentUser();
+    if (!user || (user.role === 'PROJECT_MANAGER' && !selectedProject)) return;
+    if (status === 'CHANGES_REQUIRED')
+      status =
+        user.role === 'PROJECT_MANAGER'
+          ? 'WAITING_PRODUCT_MANAGER_CHANGES'
+          : 'WAITING_PROJECT_MANAGER_CHANGES';
     this.projectService
       .updateRequirementStatus(requirementId, status)
       .subscribe({
         next: () => {
-          this.requirements.update((req) =>
+          this.requirementsForApproval.update((req) =>
+            req.filter((r) => r.id !== requirementId)
+          );
+          this.requirementsForEdit.update((req) =>
             req.filter((r) => r.id !== requirementId)
           );
           this.toastr.success('Requirement status updated successfully');
-          this.router.navigateByUrl('/projects/' + selectedProject.id);
+          if (user.role === 'PROJECT_MANAGER')
+            this.router.navigateByUrl('/projects/' + selectedProject?.id);
         },
         error: (err: any) => {
           console.log(err);
@@ -87,20 +175,44 @@ export class RequirementsScreenComponent implements OnInit {
   updateRequirement() {
     const selectedRequirement = this.selectedRequirement();
     if (!selectedRequirement) return;
+    this.loading.set(true);
     selectedRequirement.name = this.name?.value ?? selectedRequirement.name;
     selectedRequirement.description =
       this.description?.value ?? selectedRequirement.description;
     this.projectService.updateRequirement(selectedRequirement).subscribe({
       next: () => {
         this.selectedRequirement.set(null);
-        this.requirements.update((req) =>
+        this.requirementsForApproval.update((req) =>
+          req.filter((r) => r.id !== selectedRequirement.id)
+        );
+        this.requirementsForEdit.update((req) =>
           req.filter((r) => r.id !== selectedRequirement.id)
         );
         this.toastr.success('Requirement updated successfully');
+        this.loading.set(false);
+        this.closeModal();
       },
       error: (err: any) => {
         console.log(err);
+        this.toastr.error('Failed to update requirement');
+        this.loading.set(false);
       },
     });
+  }
+
+  editButtonClicked(requirement: Requirement) {
+    this.selectedRequirement.set(requirement);
+    const modalEl = document.getElementById('updateRequirementModal');
+    if (!modalEl) return;
+    const modal = new Modal(modalEl);
+    modal.show();
+  }
+
+  closeModal() {
+    const modalEl = document.getElementById('updateRequirementModal');
+    if (!modalEl) return;
+    const modal = new Modal(modalEl);
+    modal.hide();
+    this.selectedRequirement.set(null);
   }
 }

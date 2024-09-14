@@ -8,7 +8,6 @@ import {
 import { AccountService } from '../../_services/account.service';
 import { Router } from '@angular/router';
 import { ProfileService } from '../../_services/profile.service';
-import { TuiAlertService } from '@taiga-ui/core';
 import { LoginDto } from '../../_dtos/AuthDtos';
 import { TextInputComponent } from '../../_forms/text-input/text-input.component';
 import { ImageService } from '../../_services/image.service';
@@ -30,7 +29,6 @@ export class LoginComponent implements OnDestroy {
 
   constructor(
     private accountService: AccountService,
-    private alertService: TuiAlertService,
     public imageService: ImageService
   ) {}
 
@@ -55,10 +53,6 @@ export class LoginComponent implements OnDestroy {
     this.accountService.login(loginCreds).subscribe({
       next: (_) => {
         console.log('Login successful');
-        this.alertService.open('Login successful', {
-          appearance: 'success',
-          autoClose: 3000,
-        });
       },
       error: (err) => {
         console.log(err);

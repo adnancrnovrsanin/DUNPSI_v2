@@ -11,6 +11,13 @@ export interface User {
   photos: Photo[];
 }
 
+export interface CreateUserDto {
+  name: string;
+  surname: string;
+  email: string;
+  password: string;
+}
+
 export enum Role {
   PRODUCT_MANAGER = 'PRODUCT_MANAGER',
   PROJECT_MANAGER = 'PROJECT_MANAGER',

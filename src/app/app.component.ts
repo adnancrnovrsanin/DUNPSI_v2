@@ -1,4 +1,3 @@
-import { TuiRoot } from '@taiga-ui/core';
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -22,7 +21,6 @@ import { User } from './_models/user';
     HomeNavbarComponent,
     NavbarComponent,
     SidebarComponent,
-    TuiRoot,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',

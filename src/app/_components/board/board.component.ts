@@ -1,9 +1,12 @@
 import {
   Component,
   computed,
+  ElementRef,
+  OnDestroy,
   OnInit,
   Signal,
   signal,
+  ViewChild,
   WritableSignal,
 } from '@angular/core';
 import {
@@ -25,6 +28,8 @@ import { Developer } from '../../_models/profiles';
 import {
   CreateRequirementRequest,
   Requirement,
+  RequirementPriority,
+  RequirementType,
 } from '../../_models/requirement';
 import {
   CreateProjectPhaseRequest,
@@ -34,6 +39,7 @@ import {
 import {
   FormControl,
   FormGroup,
+  FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -41,6 +47,10 @@ import { TextInputComponent } from '../../_forms/text-input/text-input.component
 import { TextareaInputComponent } from '../../_forms/textarea-input/textarea-input.component';
 import { ProfileService } from '../../_services/profile.service';
 import { AvatarComponent } from '../avatar/avatar.component';
+import { truncateText } from '../../_utils/textUtils';
+import { RequirementPriorityComponent } from '../requirement-priority/requirement-priority.component';
+import { RequirementTypeIconComponent } from '../requirement-type-icon/requirement-type-icon.component';
+import { NgIconComponent } from '@ng-icons/core';
 
 @Component({
   selector: 'app-board',
@@ -58,11 +68,14 @@ import { AvatarComponent } from '../avatar/avatar.component';
     TextInputComponent,
     TextareaInputComponent,
     AvatarComponent,
+    FormsModule,
+    RequirementPriorityComponent,
+    RequirementTypeIconComponent,
   ],
   templateUrl: './board.component.html',
   styleUrl: './board.component.scss',
 })
-export class BoardComponent implements OnInit {
+export class BoardComponent implements OnInit, OnDestroy {
   id: WritableSignal<string | null> = signal(null);
   freeDevelopers: WritableSignal<Developer[]> = signal([]);
   editMode: WritableSignal<boolean> = signal(false);
@@ -89,6 +102,8 @@ export class BoardComponent implements OnInit {
       Validators.required,
       Validators.minLength(10),
     ]),
+    requirementType: new FormControl('USER_STORY', [Validators.required]),
+    requirementPriority: new FormControl(3, [Validators.required]),
   });
 
   get phaseSerialNumber() {
@@ -105,6 +120,102 @@ export class BoardComponent implements OnInit {
   }
   get requirementDescription() {
     return this.createRequirementForm.get('description');
+  }
+  get requirementType() {
+    return this.createRequirementForm.get('requirementType');
+  }
+  get requirementPriority() {
+    return this.createRequirementForm.get('requirementPriority');
+  }
+
+  get requirementTypes() {
+    return Object.values(RequirementType);
+  }
+  get priorityLevels() {
+    return [1, 2, 3, 4, 5];
+  }
+
+  truncateText = truncateText;
+
+  // Developer search
+  @ViewChild('dropdown') dropdown: ElementRef | undefined;
+  query: string = '';
+  selectedDeveloper: WritableSignal<Developer | null> = signal(null);
+  filterFlag: WritableSignal<boolean> = signal(false);
+  filteredDevelopers: WritableSignal<Developer[]> = signal([]);
+
+  filter() {
+    const selectedRequirement = this.selectedRequirement();
+    if (!this.filterFlag() || !selectedRequirement) return;
+    this.filterFlag.set(true);
+    setTimeout(() => {
+      this.filteredDevelopers.set(
+        this.freeDevelopers().filter(
+          (developer) =>
+            !selectedRequirement.assignedDevelopers.some(
+              (ad) => ad.id === developer.id
+            ) &&
+            (developer.name
+              .toLowerCase()
+              .includes(this.query.trim().toLowerCase()) ||
+              developer.surname
+                .toLowerCase()
+                .includes(this.query.trim().toLowerCase()) ||
+              developer.email
+                .toLowerCase()
+                .includes(this.query.trim().toLowerCase()) ||
+              this.query.trim() === '')
+        )
+      );
+      this.dropdown?.nativeElement.classList.remove('hidden');
+      this.filterFlag.set(false);
+    }, 200);
+  }
+
+  selectDeveloper(developer: Developer) {
+    this.selectedDeveloper.set(developer);
+    this.dropdown?.nativeElement.classList.add('hidden');
+    this.query = '';
+  }
+
+  deselectDeveloper() {
+    this.selectedDeveloper.set(null);
+    this.dropdown?.nativeElement.classList.add('hidden');
+    this.query = '';
+  }
+
+  openDropdown() {
+    const selectedRequirement = this.selectedRequirement();
+    if (!selectedRequirement) return;
+    this.filteredDevelopers.set(
+      this.freeDevelopers().filter(
+        (developer) =>
+          !selectedRequirement.assignedDevelopers.some(
+            (ad) => ad.id === developer.id
+          )
+      )
+    );
+    this.dropdown?.nativeElement.classList.remove('hidden');
+  }
+
+  assignSelectedDeveloperToRequirement() {
+    const selectedDeveloper = this.selectedDeveloper();
+    const selectedRequirement = this.selectedRequirement();
+    if (!selectedDeveloper || !selectedRequirement) return;
+    this.selectedDevelopers.update((developers) => [
+      ...developers,
+      selectedDeveloper,
+    ]);
+    this.deselectDeveloper();
+  }
+
+  ngOnDestroy(): void {
+    this.filterFlag.set(false);
+    this.filteredDevelopers.set([]);
+    this.selectedDeveloper.set(null);
+    this.query = '';
+    this.selectedDevelopers.set([]);
+    this.selectedRequirement.set(null);
   }
 
   onSubmitPhase() {
@@ -149,9 +260,11 @@ export class BoardComponent implements OnInit {
       projectId: id ?? '',
       status:
         user.role === 'PROJECT_MANAGER'
-          ? 'WAITING_PRODUCT_MANAGER'
-          : 'WAITING_PROJECT_MANAGER',
+          ? 'WAITING_PRODUCT_MANAGER_APPROVAL'
+          : 'WAITING_PROJECT_MANAGER_APPROVAL',
       serialNumber: 0,
+      type: this.requirementType?.value ?? 'USER_STORY',
+      priority: this.requirementPriority?.value ?? 3,
     };
 
     this.projectService.createRequirement(createRequirementRequest).subscribe({
@@ -266,10 +379,34 @@ export class BoardComponent implements OnInit {
         next: () => {
           this.selectedDevelopers.set([]);
           this.selectedRequirement.set(null);
+          this.toastr.success('Developers assigned successfully');
           window.location.reload();
         },
         error: (error) => {
           console.log(error);
+        },
+      });
+  }
+
+  assignDeveloper() {
+    const selectedDeveloper = this.selectedDeveloper();
+    const selectedRequirement = this.selectedRequirement();
+    if (!selectedDeveloper || !selectedRequirement) return;
+    this.deselectDeveloper();
+    selectedRequirement.assignedDevelopers = [
+      ...selectedRequirement.assignedDevelopers,
+      selectedDeveloper,
+    ];
+    this.projectService
+      .assignDevelopersToRequirement(selectedRequirement)
+      .subscribe({
+        next: () => {
+          this.toastr.success('Developer assigned successfully');
+          this.selectedRequirement.set(selectedRequirement);
+        },
+        error: (error) => {
+          console.log(error);
+          this.toastr.error(error);
         },
       });
   }
@@ -292,10 +429,5 @@ export class BoardComponent implements OnInit {
   getText(number: number) {
     if (number === 1) return 'developer';
     return 'developers';
-  }
-
-  truncateText(text: string, length: number) {
-    if (text.length <= length) return text;
-    return text.slice(0, length) + '...';
   }
 }
