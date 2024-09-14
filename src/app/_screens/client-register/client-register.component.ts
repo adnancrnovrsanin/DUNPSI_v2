@@ -97,10 +97,12 @@ export class ClientRegisterComponent {
   onSubmit() {
     this.loading.set(true);
     const registrationData: CreateSoftwareCompanyCredentials = {
-      name: this.representativeName?.value ?? '',
-      surname: this.representativeSurname?.value ?? '',
-      email: this.email?.value ?? '',
-      password: this.password?.value ?? '',
+      user: {
+        name: this.representativeName?.value ?? '',
+        surname: this.representativeSurname?.value ?? '',
+        email: this.email?.value ?? '',
+        password: this.password?.value ?? '',
+      },
       companyName: this.companyName?.value ?? '',
       address: this.address?.value ?? '',
       contact: this.contact?.value ?? '',

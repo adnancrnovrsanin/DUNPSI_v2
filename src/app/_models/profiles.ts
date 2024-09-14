@@ -1,3 +1,5 @@
+import { CreateUserDto } from './user';
+
 export interface ProjectManager {
   id: string;
   appUserId: string;
@@ -28,4 +30,20 @@ export interface Developer {
   profileImageUrl?: string;
   position: string;
   numberOfActiveTasks: number;
+}
+
+export interface CreateDeveloperDto {
+  user: CreateUserDto;
+  position: string;
+  numberOfActiveTasks: number; // Ignore this field
+}
+
+export interface CreateProductManagerDto {
+  user: CreateUserDto;
+}
+
+export interface CreateProjectManagerDto {
+  user: CreateUserDto;
+  certificateUrl: string;
+  yearsOfExperience: number;
 }
