@@ -19,6 +19,7 @@ import { RequirementsScreenComponent } from './_screens/requirements-screen/requ
 import { ClientRegisterComponent } from './_screens/client-register/client-register.component';
 import { CompanyProjectsComponent } from './_screens/company-projects/company-projects.component';
 import { AdminDashboardComponent } from './_screens/admin-dashboard/admin-dashboard.component';
+import { AdminAddUserComponent } from './_screens/admin-add-user/admin-add-user.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -30,6 +31,7 @@ export const routes: Routes = [
     component: AppWrapperComponent,
     children: [
       { path: 'admin-dashboard', component: AdminDashboardComponent },
+      { path: 'admin-add-user', component: AdminAddUserComponent },
       { path: 'dashboard/:id', component: DashboardComponent },
       { path: 'messages', component: MessagesComponent },
       { path: 'projects', component: ClientProjectsComponent },

@@ -226,7 +226,7 @@ export class SidebarComponent implements OnInit {
         },
         {
           title: 'Add User',
-          link: currentProject ? `/projects/${currentProject.id}` : '',
+          link: `/admin-add-user`,
           icon: 'lucidePlus',
           keyword: 'addUser',
         },
