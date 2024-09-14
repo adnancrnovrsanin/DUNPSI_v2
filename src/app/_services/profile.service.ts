@@ -1,6 +1,11 @@
 import { Injectable, signal, WritableSignal } from '@angular/core';
 import { environment } from '../../environments/environment.development';
-import { Developer, ProductManager, ProjectManager } from '../_models/profiles';
+import {
+  Admin,
+  Developer,
+  ProductManager,
+  ProjectManager,
+} from '../_models/profiles';
 import { HttpClient } from '@angular/common/http';
 import { ProjectService } from './project.service';
 import { ToastrService } from 'ngx-toastr';
@@ -19,6 +24,7 @@ export class ProfileService {
   currentDeveloper: WritableSignal<Developer | null> = signal(null);
   currentProductManager: WritableSignal<ProductManager | null> = signal(null);
   currentProjectManager: WritableSignal<ProjectManager | null> = signal(null);
+  currentAdmin: WritableSignal<Admin | null> = signal(null);
 
   constructor(
     private http: HttpClient,
@@ -38,6 +44,10 @@ export class ProfileService {
     );
   }
 
+  getAdminById(userId: string) {
+    return this.http.get<Admin>(this.baseUrl + 'Admin/users/admin/' + userId);
+  }
+
   getProjectManager(userId: string) {
     return this.http.get<ProjectManager>(
       this.baseUrl + 'projectmanager/' + userId
@@ -50,6 +60,10 @@ export class ProfileService {
 
   setCurrentDeveloper(developer: Developer) {
     this.currentDeveloper.set(developer);
+  }
+
+  setCurrentAdmin(admin: Admin) {
+    this.currentAdmin.set(admin);
   }
 
   setCurrentProductManager(productManager: ProductManager) {
@@ -72,6 +86,10 @@ export class ProfileService {
       [Role.PRODUCT_MANAGER]: (id: string) =>
         this.getProductManager(id).subscribe((productManager) => {
           this.setCurrentProductManager(productManager);
+        }),
+      [Role.ADMIN]: (id: string) =>
+        this.getAdminById(id).subscribe((admin) => {
+          this.setCurrentAdmin(admin);
         }),
       [Role.PROJECT_MANAGER]: (id: string) =>
         this.getProjectManager(id).subscribe((projectManager) => {

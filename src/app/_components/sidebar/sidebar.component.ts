@@ -22,6 +22,8 @@ import {
   lucideHistory,
   lucideCircleUserRound,
   lucideList,
+  lucideBookOpenText,
+  lucidePlus,
 } from '@ng-icons/lucide';
 import { TeamService } from '../../_services/team.service';
 import { ProfileService } from '../../_services/profile.service';
@@ -48,6 +50,8 @@ interface SidebarItem {
       lucideHistory,
       lucideCircleUserRound,
       lucideList,
+      lucideBookOpenText,
+      lucidePlus,
     }),
   ],
 })
@@ -195,6 +199,23 @@ export class SidebarComponent implements OnInit {
           link: '/messages',
           icon: 'lucideMessageSquareMore',
           keyword: 'messages',
+        },
+      ];
+    }
+
+    if (currentUser.role === Role.ADMIN) {
+      return [
+        {
+          title: 'Admin Dashboard',
+          link: `/admin-dashboard`,
+          icon: 'lucideBookOpenText',
+          keyword: 'adminDashboard',
+        },
+        {
+          title: 'Add User',
+          link: currentProject ? `/projects/${currentProject.id}` : '',
+          icon: 'lucidePlus',
+          keyword: 'addUser',
         },
       ];
     }

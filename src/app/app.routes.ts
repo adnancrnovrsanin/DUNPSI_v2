@@ -16,6 +16,7 @@ import { ClientProjectsComponent } from './_screens/client-projects/client-proje
 import { ProjectPageComponent } from './_screens/project-page/project-page.component';
 import { TeamComponent } from './_screens/team/team.component';
 import { RequirementsScreenComponent } from './_screens/requirements-screen/requirements-screen.component';
+import { AdminDashboardComponent } from './_screens/admin-dashboard/admin-dashboard.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -25,6 +26,7 @@ export const routes: Routes = [
     canActivate: [authGuard],
     component: AppWrapperComponent,
     children: [
+      { path: 'admin-dashboard', component: AdminDashboardComponent },
       { path: 'dashboard/:id', component: DashboardComponent },
       { path: 'messages', component: MessagesComponent },
       { path: 'projects', component: ClientProjectsComponent },
