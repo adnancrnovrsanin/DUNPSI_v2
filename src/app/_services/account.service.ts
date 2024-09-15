@@ -82,10 +82,6 @@ export class AccountService {
     return this.http.get<User[]>(this.baseUrl + 'account/search/all');
   }
 
-  searchUsers(searchText: string) {
-    return this.http.get<User[]>(this.baseUrl + 'account/search/' + searchText);
-  }
-
   createSoftwareCompany(
     softwareCompanyCreds: CreateSoftwareCompanyCredentials
   ) {

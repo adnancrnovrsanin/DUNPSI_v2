@@ -18,6 +18,13 @@ export class HomeNavbarComponent {
   ) {}
 
   goToDashboard() {
-    this.router.navigate(['/dashboard', this.accountService.currentUser()?.id]);
+    if (this.accountService.currentUser()?.role === 'ADMIN') {
+      this.router.navigate(['/admin-dashboard']);
+    } else {
+      this.router.navigate([
+        '/dashboard',
+        this.accountService.currentUser()?.id,
+      ]);
+    }
   }
 }
