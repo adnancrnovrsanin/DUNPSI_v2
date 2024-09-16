@@ -5,7 +5,10 @@ import { HttpClient } from '@angular/common/http';
 import { ProjectService } from './project.service';
 import { ToastrService } from 'ngx-toastr';
 import { Role, User } from '../_models/user';
-import { ProjectDto } from '../_models/softwareProject';
+import {
+  ProjectDto,
+  projectStatusFromString,
+} from '../_models/softwareProject';
 import { Subscription } from 'rxjs';
 import { ProjectsService } from './projects.service';
 import { TeamService } from './team.service';
@@ -109,6 +112,7 @@ export class ProfileService {
         this.projectService.selectedProject.set({
           ...project,
           dueDate: new Date(project.dueDate),
+          status: projectStatusFromString(project.status),
         });
       },
       error: (err) => this.toastr.error(err.error),

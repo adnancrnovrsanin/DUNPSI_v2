@@ -1,7 +1,7 @@
 <div class="w-full flex flex-col space-y-8 p-8 cursor-pointer">
   <div class="w-full flex items-center justify-start">
     <h1 class="text-2xl text-slate-500 dark:text-gray-400">
-      Here are your projects we are working on:
+      These projects need your attention
     </h1>
   </div>
 
@@ -14,8 +14,8 @@
     </h1>
     } @else { @for (project of projects(); track $index) {
     <div
-      (click)="link(project)"
       class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
+      (click)="navigateToProject(project.id)"
     >
       <h5
         class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
@@ -32,15 +32,7 @@
           {{ project.assignedTeam.manager.surname }}</strong
         >
       </p>
-      @if (project.status === 'COMPLETED') {
-      <p class="font-normal text-gray-700 dark:text-gray-400">
-        Finished: <strong>Yes</strong>
-      </p>
-      } @else {
-      <p class="font-normal text-gray-700 dark:text-gray-400">
-        Finished: <strong>No</strong>
-      </p>
-      }
+      <p class="font-bold text-gray-700 dark:text-gray-400">ACTION NEEDED</p>
     </div>
     } }
   </div>

@@ -50,7 +50,7 @@ export class AccountService {
         const user = response;
         if (user) {
           this.setCurrentUser(user);
-          this.router.navigate(['/dashboard', user.id]);
+          this.router.navigate(['/messages']);
         }
       })
     );
@@ -82,8 +82,27 @@ export class AccountService {
     return this.http.get<User[]>(this.baseUrl + 'account/search/all');
   }
 
+  getUser(id: string) {
+    return this.http.get<User>(this.baseUrl + 'account/' + id);
+  }
+
+  getUserByEmail(email: string) {
+    return this.http.get<User>(this.baseUrl + 'account/email/' + email);
+  }
+
   searchUsers(searchText: string) {
     return this.http.get<User[]>(this.baseUrl + 'account/search/' + searchText);
+  }
+
+  setMainPhoto(photoId: number) {
+    return this.http.put(
+      this.baseUrl + 'photos/' + this.currentUser()?.id + '/setmain/' + photoId,
+      {}
+    );
+  }
+
+  deletePhoto(photoId: number) {
+    return this.http.delete(this.baseUrl + 'photos/' + photoId);
   }
 
   createSoftwareCompany(
@@ -91,7 +110,7 @@ export class AccountService {
   ) {
     return this.http
       .post<CreateSoftwareCompanyResponse>(
-        this.baseUrl + 'account/register-company',
+        this.baseUrl + 'softwareCompany',
         softwareCompanyCreds
       )
       .pipe(

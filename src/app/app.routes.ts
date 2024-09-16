@@ -18,6 +18,11 @@ import { TeamComponent } from './_screens/team/team.component';
 import { RequirementsScreenComponent } from './_screens/requirements-screen/requirements-screen.component';
 import { ClientRegisterComponent } from './_screens/client-register/client-register.component';
 import { CompanyProjectsComponent } from './_screens/company-projects/company-projects.component';
+import { ChatPageComponent } from './_screens/chat-page/chat-page.component';
+import { ImagesScreenComponent } from './_screens/images-screen/images-screen.component';
+import { ManagerProjectHistoryComponent } from './_screens/manager-project-history/manager-project-history.component';
+import { ProjectHistoryComponent } from './_screens/project-history/project-history.component';
+import { ClientProjectsActionNeededComponent } from './_screens/client-projects-action-needed/client-projects-action-needed.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -30,7 +35,12 @@ export const routes: Routes = [
     children: [
       { path: 'dashboard/:id', component: DashboardComponent },
       { path: 'messages', component: MessagesComponent },
+      { path: 'messages/:email', component: ChatPageComponent },
       { path: 'projects', component: ClientProjectsComponent },
+      {
+        path: 'client/project/action-needed',
+        component: ClientProjectsActionNeededComponent,
+      },
       { path: 'company/projects', component: CompanyProjectsComponent },
       {
         path: 'requirements',
@@ -52,7 +62,16 @@ export const routes: Routes = [
         component: ProjectManagerRequestDetailsComponent,
         resolve: projectRequestDetailedResolver,
       },
+      {
+        path: 'projects/history',
+        component: ProjectHistoryComponent,
+      },
+      {
+        path: 'projects/manager/history/:id',
+        component: ManagerProjectHistoryComponent,
+      },
       { path: 'teams/:id', component: TeamComponent },
+      { path: 'images/:id', component: ImagesScreenComponent },
     ],
   },
   { path: 'login', component: LoginComponent },

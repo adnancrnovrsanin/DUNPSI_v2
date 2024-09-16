@@ -7,7 +7,12 @@ import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { of } from 'rxjs';
 import { ProjectManager } from '../_models/profiles';
-import { ProjectCreateDto, ProjectDto } from '../_models/softwareProject';
+import {
+  ProjectCreateDto,
+  ProjectDto,
+  ProjectStatus,
+  projectStatusFromString,
+} from '../_models/softwareProject';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment.development';
 
@@ -23,7 +28,7 @@ export class ProjectsService {
   constructor(
     private http: HttpClient,
     private toastr: ToastrService,
-    private router: Router,
+    private router: Router
   ) {}
 
   getAllProjects() {
@@ -40,38 +45,16 @@ export class ProjectsService {
           this.projectRequests.set(
             response.map((projectRequest) => {
               return {
-                id: projectRequest.id,
-                projectName: projectRequest.projectName,
-                projectDescription: projectRequest.projectDescription,
+                ...projectRequest,
                 dueDate: new Date(projectRequest.dueDate),
-                rejected: projectRequest.rejected,
-                rejectedByManager: projectRequest.rejectedByManager,
-                managerRejectionReason: projectRequest.managerRejectionReason,
-                appointedManagerId: projectRequest.appointedManagerId,
-                appointedManagerEmail: projectRequest.appointedManagerEmail,
-                clientId: projectRequest.clientId,
                 client: {
-                  id: projectRequest.client.id,
-                  appUserId: projectRequest.client.appUserId,
-                  representativeName: projectRequest.client.representativeName,
-                  representativeSurname:
-                    projectRequest.client.representativeSurname,
-                  email: projectRequest.client.email,
-                  companyName: projectRequest.client.companyName,
-                  address: projectRequest.client.address,
-                  contact: projectRequest.client.contact,
-                  web: projectRequest.client.web,
+                  ...projectRequest.client,
                   currentProjects: projectRequest.client.currentProjects.map(
                     (project) => {
                       return {
-                        id: project.id,
-                        clientId: project.clientId,
-                        name: project.name,
-                        description: project.description,
+                        ...project,
                         dueDate: new Date(project.dueDate),
-                        finished: project.finished,
-                        assignedTeamId: project.assignedTeamId,
-                        assignedTeam: project.assignedTeam,
+                        status: projectStatusFromString(project.status),
                       };
                     }
                   ),
@@ -96,37 +79,16 @@ export class ProjectsService {
         next: (response) => {
           this.projectRequests.set(
             response.map((requests) => ({
-              id: requests.id,
-              projectName: requests.projectName,
-              projectDescription: requests.projectDescription,
+              ...requests,
               dueDate: new Date(requests.dueDate),
-              rejected: requests.rejected,
-              rejectedByManager: requests.rejectedByManager,
-              managerRejectionReason: requests.managerRejectionReason,
-              appointedManagerId: requests.appointedManagerId,
-              appointedManagerEmail: requests.appointedManagerEmail,
-              clientId: requests.clientId,
               client: {
-                id: requests.client.id,
-                appUserId: requests.client.appUserId,
-                representativeName: requests.client.representativeName,
-                representativeSurname: requests.client.representativeSurname,
-                email: requests.client.email,
-                companyName: requests.client.companyName,
-                address: requests.client.address,
-                contact: requests.client.contact,
-                web: requests.client.web,
+                ...requests.client,
                 currentProjects: requests.client.currentProjects.map(
                   (project) => {
                     return {
-                      id: project.id,
-                      clientId: project.clientId,
-                      name: project.name,
-                      description: project.description,
+                      ...project,
                       dueDate: new Date(project.dueDate),
-                      finished: project.finished,
-                      assignedTeamId: project.assignedTeamId,
-                      assignedTeam: project.assignedTeam,
+                      status: projectStatusFromString(project.status),
                     };
                   }
                 ),
@@ -156,37 +118,16 @@ export class ProjectsService {
       .subscribe({
         next: (response) => {
           this.selectedProjectRequest = {
-            id: response.id,
-            projectName: response.projectName,
-            projectDescription: response.projectDescription,
+            ...response,
             dueDate: new Date(response.dueDate),
-            rejected: response.rejected,
-            rejectedByManager: response.rejectedByManager,
-            managerRejectionReason: response.managerRejectionReason,
-            appointedManagerId: response.appointedManagerId,
-            appointedManagerEmail: response.appointedManagerEmail,
-            clientId: response.clientId,
             client: {
-              id: response.client.id,
-              appUserId: response.client.appUserId,
-              representativeName: response.client.representativeName,
-              representativeSurname: response.client.representativeSurname,
-              email: response.client.email,
-              companyName: response.client.companyName,
-              address: response.client.address,
-              contact: response.client.contact,
-              web: response.client.web,
+              ...response.client,
               currentProjects: response.client.currentProjects.map(
                 (project) => {
                   return {
-                    id: project.id,
-                    clientId: project.clientId,
-                    name: project.name,
-                    description: project.description,
+                    ...project,
                     dueDate: new Date(project.dueDate),
-                    finished: project.finished,
-                    assignedTeamId: project.assignedTeamId,
-                    assignedTeam: project.assignedTeam,
+                    status: projectStatusFromString(project.status),
                   };
                 }
               ),
@@ -288,7 +229,13 @@ export class ProjectsService {
       });
   }
 
-  getProjectHistory(managerId: string) {
+  getCompanyProjectHistory() {
+    return this.http.get<ProjectDto[]>(
+      this.baseUrl + 'softwareProject/project-history'
+    );
+  }
+
+  getManagerProjectHistory(managerId: string) {
     return this.http.get<ProjectDto[]>(
       this.baseUrl + 'projectManager/project-history/' + managerId
     );

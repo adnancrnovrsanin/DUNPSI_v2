@@ -4,7 +4,11 @@ import {
   SoftwareCompanyDto,
 } from '../_models/softwareCompany';
 import { HttpClient } from '@angular/common/http';
-import { Project, ProjectDto } from '../_models/softwareProject';
+import {
+  Project,
+  ProjectDto,
+  projectStatusFromString,
+} from '../_models/softwareProject';
 import { CreateInitialProjectRequest } from '../_models/projectRequest';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
@@ -45,6 +49,7 @@ export class SoftwareCompanyService {
       currentProjects: softwareCompany.currentProjects.map((project) => ({
         ...project,
         dueDate: new Date(project.dueDate),
+        status: projectStatusFromString(project.status),
       })),
     };
 
@@ -70,11 +75,22 @@ export class SoftwareCompanyService {
               .map((project) => ({
                 ...project,
                 dueDate: new Date(project.dueDate),
+                status: projectStatusFromString(project.status),
               })),
           ]);
         },
         error: console.log,
       });
+  }
+
+  getCompanyProjectsWhereActionNeeded() {
+    if (!this.currentSoftwareCompany()) return;
+
+    return this.http.get<ProjectDto[]>(
+      `${this.baseUrl}softwareCompany/projects/${
+        this.currentSoftwareCompany()?.id
+      }/action-needed/`
+    );
   }
 
   sendInitialProjectRequest(projectRequest: CreateInitialProjectRequest) {

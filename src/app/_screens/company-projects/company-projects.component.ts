@@ -1,6 +1,6 @@
 import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { ProjectsService } from '../../_services/projects.service';
-import { Project } from '../../_models/softwareProject';
+import { Project, projectStatusFromString } from '../../_models/softwareProject';
 import { Router } from '@angular/router';
 
 @Component({
@@ -25,6 +25,7 @@ export class CompanyProjectsComponent implements OnInit {
           data.map((project) => ({
             ...project,
             dueDate: new Date(project.dueDate),
+            status: projectStatusFromString(project.status),
           }))
         );
       },

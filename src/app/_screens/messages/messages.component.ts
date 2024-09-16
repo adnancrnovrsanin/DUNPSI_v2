@@ -26,10 +26,11 @@ import {
   Validators,
 } from '@angular/forms';
 import { AvatarComponent } from '../../_components/avatar/avatar.component';
-import { map, Observable, of, startWith } from 'rxjs';
 import { UserSearchAutocompleteComponent } from '../../_components/user-search-autocomplete/user-search-autocomplete.component';
 import { ToastrService } from 'ngx-toastr';
 import { ProfileService } from '../../_services/profile.service';
+import { Modal } from 'flowbite';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-messages',
@@ -48,7 +49,7 @@ import { ProfileService } from '../../_services/profile.service';
   styleUrl: './messages.component.scss',
   viewProviders: [provideIcons({ radixPlus, radixTrash })],
 })
-export class MessagesComponent implements OnInit, OnDestroy {
+export class MessagesComponent implements OnInit {
   messages: WritableSignal<Message[]> = signal([]);
   pagination: WritableSignal<Pagination | null> = signal(null);
   container: WritableSignal<string> = signal('Unread');
@@ -71,8 +72,6 @@ export class MessagesComponent implements OnInit, OnDestroy {
       (_, i) => startPage + i
     );
   });
-
-  @ViewChild('messageModal') messageModal: ElementRef | undefined;
 
   newMessageForm = new FormGroup({
     recipientEmail: new FormControl('', [
@@ -109,7 +108,8 @@ export class MessagesComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private accountService: AccountService,
     private toastr: ToastrService,
-    public profileService: ProfileService
+    public profileService: ProfileService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -215,7 +215,11 @@ export class MessagesComponent implements OnInit, OnDestroy {
       this.loading.set(false);
       return;
     }
-    this.messageModal?.nativeElement.classList.add('hidden');
+    const modalEl = document.getElementById('crud-modal');
+    if (modalEl) {
+      const modal = new Modal(modalEl);
+      modal.hide();
+    }
     this.messageService
       .sendMessageRest(this.recipientEmail, this.content)
       .subscribe({
@@ -231,7 +235,11 @@ export class MessagesComponent implements OnInit, OnDestroy {
     this.loading.set(false);
   }
 
-  ngOnDestroy(): void {
-    this.messageService.stopHubConnection();
+  openChat(message: Message) {
+    if (this.container() === 'Outbox') {
+      this.router.navigate(['/messages', message.recipientEmail]);
+    } else {
+      this.router.navigate(['/messages', message.senderEmail]);
+    }
   }
 }

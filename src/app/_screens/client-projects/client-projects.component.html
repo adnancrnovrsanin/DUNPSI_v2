@@ -167,7 +167,7 @@
           {{ project.assignedTeam.manager.surname }}</strong
         >
       </p>
-      @if (project.finished) {
+      @if (project.status === 'COMPLETED') {
       <p class="font-normal text-gray-700 dark:text-gray-400">
         Finished: <strong>Yes</strong>
       </p>

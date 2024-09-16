@@ -22,6 +22,7 @@ import {
   lucideHistory,
   lucideCircleUserRound,
   lucideList,
+  lucideImage,
 } from '@ng-icons/lucide';
 import { TeamService } from '../../_services/team.service';
 import { ProfileService } from '../../_services/profile.service';
@@ -49,6 +50,7 @@ interface SidebarItem {
       lucideHistory,
       lucideCircleUserRound,
       lucideList,
+      lucideImage,
     }),
   ],
 })
@@ -76,16 +78,16 @@ export class SidebarComponent implements OnInit {
     if (currentUser.role === Role.SOFTWARE_COMPANY) {
       return [
         {
-          title: 'Dashboard',
-          link: `/dashboard/${currentUser.id}`,
-          icon: 'lucidePieChart',
-          keyword: 'dashboard',
-        },
-        {
           title: 'Your Projects',
           link: `/projects`,
           icon: 'lucideSquareKanban',
           keyword: 'projects',
+        },
+        {
+          title: 'Projects needing action',
+          link: `/client/project/action-needed`,
+          icon: 'lucideSquareKanban',
+          keyword: 'action-needed',
         },
         {
           title: 'Messages',
@@ -93,17 +95,17 @@ export class SidebarComponent implements OnInit {
           icon: 'lucideMessageSquareMore',
           keyword: 'messages',
         },
+        {
+          title: 'Images',
+          link: `/images/${currentUser.id}`,
+          icon: 'lucideImage',
+          keyword: 'images',
+        },
       ];
     }
 
     if (currentUser.role === Role.PROJECT_MANAGER) {
       return [
-        {
-          title: 'Dashboard',
-          link: `/dashboard/${currentUser.id}`,
-          icon: 'lucidePieChart',
-          keyword: 'dashboard',
-        },
         {
           title: currentProject
             ? truncateText(`${currentProject.name} Board`, 20)
@@ -138,12 +140,17 @@ export class SidebarComponent implements OnInit {
           icon: 'lucideFileQuestion',
           keyword: 'requests',
         },
-
         {
           title: 'Project History',
-          link: '/projects/manager/history',
+          link: `projects/manager/history/${currentUser.id}`,
           icon: 'lucideHistory',
           keyword: 'history',
+        },
+        {
+          title: 'Images',
+          link: `/images/${currentUser.id}`,
+          icon: 'lucideImage',
+          keyword: 'images',
         },
       ].filter(
         (item) =>
@@ -156,12 +163,6 @@ export class SidebarComponent implements OnInit {
 
     if (currentUser.role === Role.PRODUCT_MANAGER) {
       return [
-        {
-          title: 'Dashboard',
-          link: `/dashboard/${currentUser.id}`,
-          icon: 'lucidePieChart',
-          keyword: 'dashboard',
-        },
         {
           title: 'All Company Projects',
           link: `/company/projects`,
@@ -186,17 +187,23 @@ export class SidebarComponent implements OnInit {
           icon: 'lucideList',
           keyword: 'requirements',
         },
+        {
+          title: 'Project History',
+          link: 'projects/history',
+          icon: 'lucideHistory',
+          keyword: 'history',
+        },
+        {
+          title: 'Images',
+          link: `/images/${currentUser.id}`,
+          icon: 'lucideImage',
+          keyword: 'images',
+        },
       ];
     }
 
     if (currentUser.role === Role.DEVELOPER) {
       return [
-        {
-          title: 'Dashboard',
-          link: `/dashboard/${currentUser.id}`,
-          icon: 'lucidePieChart',
-          keyword: 'dashboard',
-        },
         {
           title: 'Current Project',
           link: currentProject ? `/projects/${currentProject.id}` : '',
@@ -208,6 +215,12 @@ export class SidebarComponent implements OnInit {
           link: '/messages',
           icon: 'lucideMessageSquareMore',
           keyword: 'messages',
+        },
+        {
+          title: 'Images',
+          link: `/images/${currentUser.id}`,
+          icon: 'lucideImage',
+          keyword: 'images',
         },
       ];
     }

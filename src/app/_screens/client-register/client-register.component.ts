@@ -11,6 +11,7 @@ import {
 import { AccountService } from '../../_services/account.service';
 import { ImageService } from '../../_services/image.service';
 import { TextInputComponent } from '../../_forms/text-input/text-input.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-client-register',
@@ -25,7 +26,8 @@ export class ClientRegisterComponent {
 
   constructor(
     private accountService: AccountService,
-    public imageService: ImageService
+    public imageService: ImageService,
+    private router: Router
   ) {}
 
   registrationForm = new FormGroup({
@@ -114,6 +116,7 @@ export class ClientRegisterComponent {
         console.log('Registration successful');
         this.registrationForm.reset();
         this.loading.set(false);
+        this.router.navigate(['/messages']);
       },
       error: (error) => {
         console.log(error);

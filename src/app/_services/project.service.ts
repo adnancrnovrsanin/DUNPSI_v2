@@ -1,5 +1,10 @@
 import { Injectable, signal, WritableSignal } from '@angular/core';
-import { Project, ProjectDto } from '../_models/softwareProject';
+import {
+  Project,
+  ProjectDto,
+  ProjectStatus,
+  projectStatusFromString,
+} from '../_models/softwareProject';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import {
@@ -32,6 +37,7 @@ export class ProjectService {
           this.selectedProject.set({
             ...project,
             dueDate: new Date(project.dueDate),
+            status: projectStatusFromString(project.status),
           });
         },
         error: (error) => {
@@ -149,15 +155,6 @@ export class ProjectService {
     return this.http.put<void>(this.baseUrl + 'requirements', requirement);
   }
 
-  markProjectAsFinished() {
-    return this.http.put<void>(
-      this.baseUrl +
-        'softwareProject/finish-project/' +
-        this.selectedProject()?.id,
-      null
-    );
-  }
-
   createProjectPhase(projectPhase: CreateProjectPhaseRequest) {
     return this.http.post<void>(this.baseUrl + 'projectPhases', projectPhase);
   }
@@ -166,6 +163,24 @@ export class ProjectService {
     return this.http.delete<void>(
       this.baseUrl + 'projectPhases/' + projectPhaseId
     );
+  }
+
+  requestClientInput(projectId: string) {
+    const selectedProject = this.selectedProject();
+    if (!selectedProject || selectedProject.id !== projectId) return;
+    return this.http.put<void>(this.baseUrl + 'softwareProject', {
+      ...selectedProject,
+      status: ProjectStatus.WAITING_CLIENT_INPUT,
+    });
+  }
+
+  completeProject(projectId: string) {
+    const selectedProject = this.selectedProject();
+    if (!selectedProject || selectedProject.id !== projectId) return;
+    return this.http.put<void>(this.baseUrl + 'softwareProject', {
+      ...selectedProject,
+      status: ProjectStatus.COMPLETED,
+    });
   }
 
   clear() {

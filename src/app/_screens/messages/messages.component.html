@@ -87,7 +87,8 @@
           } @for (message of messages(); track $index) {
           <tbody>
             <tr
-              class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+              class="bg-white border-b cursor-pointer dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+              (click)="openChat(message)"
             >
               <th
                 scope="row"
@@ -233,7 +234,6 @@
   id="crud-modal"
   tabindex="-1"
   aria-hidden="true"
-  #messageModal
   class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
 >
   <div class="relative p-4 w-full max-w-md max-h-full">
@@ -325,7 +325,6 @@
         } @else {
         <button
           type="submit"
-          (click)="newMessageForm.valid && sendMessage()"
           class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
         >
           Send Message

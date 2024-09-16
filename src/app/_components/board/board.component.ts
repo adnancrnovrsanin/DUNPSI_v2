@@ -51,6 +51,7 @@ import { truncateText } from '../../_utils/textUtils';
 import { RequirementPriorityComponent } from '../requirement-priority/requirement-priority.component';
 import { RequirementTypeIconComponent } from '../requirement-type-icon/requirement-type-icon.component';
 import { NgIconComponent } from '@ng-icons/core';
+import { ProjectStatus } from '../../_models/softwareProject';
 
 @Component({
   selector: 'app-board',
@@ -418,6 +419,42 @@ export class BoardComponent implements OnInit, OnDestroy {
           phases.filter((phase) => phase.id !== projectPhaseId)
         );
         this.toastr.success('Phase deleted successfully');
+      },
+      error: (error) => {
+        console.log(error);
+        this.toastr.error(error);
+      },
+    });
+  }
+
+  requestClientInput() {
+    const id = this.id();
+    if (!id) return;
+    this.projectService.requestClientInput(id)?.subscribe({
+      next: () => {
+        this.toastr.success('Client input requested');
+        this.projectService.selectedProject.update((project) => {
+          if (!project) return null;
+          return { ...project, status: ProjectStatus.WAITING_CLIENT_INPUT };
+        });
+      },
+      error: (error) => {
+        console.log(error);
+        this.toastr.error(error);
+      },
+    });
+  }
+
+  completeTheProject() {
+    const id = this.id();
+    if (!id) return;
+    this.projectService.completeProject(id)?.subscribe({
+      next: () => {
+        this.toastr.success('Project completed');
+        this.projectService.selectedProject.update((project) => {
+          if (!project) return null;
+          return { ...project, status: ProjectStatus.COMPLETED };
+        });
       },
       error: (error) => {
         console.log(error);
