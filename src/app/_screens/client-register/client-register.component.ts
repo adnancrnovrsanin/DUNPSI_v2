@@ -116,7 +116,7 @@ export class ClientRegisterComponent {
         console.log('Registration successful');
         this.registrationForm.reset();
         this.loading.set(false);
-        this.router.navigate(['/messages']);
+        this.router.navigate(['/projects']);
       },
       error: (error) => {
         console.log(error);
@@ -124,5 +124,9 @@ export class ClientRegisterComponent {
         this.loading.set(false);
       },
     });
+  }
+
+  goToHome() {
+    this.router.navigate(['/']);
   }
 }

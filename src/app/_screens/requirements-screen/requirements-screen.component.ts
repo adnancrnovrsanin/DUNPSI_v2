@@ -79,14 +79,14 @@ export class RequirementsScreenComponent implements OnInit {
 
   ngOnInit(): void {
     const user = this.accountService.currentUser();
-    if (!user) return;
-
-    if (user.role === 'PROJECT_MANAGER') {
-      const selectedProject = this.projectService.selectedProject();
-      if (!selectedProject) return;
-      this.getRequirementsForProjectManager(selectedProject, user);
-    } else if (user.role === 'PRODUCT_MANAGER') {
-      this.getRequirementsForProductManager(user);
+    if (user) {
+      if (user.role === 'PROJECT_MANAGER') {
+        const selectedProject = this.projectService.selectedProject();
+        if (!selectedProject) return;
+        this.getRequirementsForProjectManager(selectedProject, user);
+      } else if (user.role === 'PRODUCT_MANAGER') {
+        this.getRequirementsForProductManager(user);
+      }
     }
   }
 

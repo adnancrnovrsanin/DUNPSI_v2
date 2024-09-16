@@ -21,6 +21,15 @@ export interface ProductManager {
   profileImageUrl?: string;
 }
 
+export interface Admin {
+  id: string;
+  appUserId: string;
+  name: string;
+  surname: string;
+  email: string;
+  profileImageUrl?: string;
+}
+
 export interface Developer {
   id: string;
   appUserId: string;

@@ -1,7 +1,7 @@
 import { Injectable, signal, WritableSignal } from '@angular/core';
 import { Role, User } from '../_models/user';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 import { PresenceService } from './presence.service';
 import { ProfileService } from './profile.service';
 import { Router } from '@angular/router';
@@ -50,7 +50,11 @@ export class AccountService {
         const user = response;
         if (user) {
           this.setCurrentUser(user);
-          this.router.navigate(['/messages']);
+          if (user.role === Role.ADMIN) {
+            this.router.navigate(['/admin/users']);
+          } else {
+            this.router.navigate(['/messages']);
+          }
         }
       })
     );

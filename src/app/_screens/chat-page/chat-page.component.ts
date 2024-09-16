@@ -72,12 +72,11 @@ export class ChatPageComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const email = this.email();
     const currentUser = this.accountService.currentUser();
-    if (!email || !currentUser) {
-      return;
+    if (email && currentUser) {
+      this.loading.set(true);
+      this.messageService.createHubConnection(currentUser, email);
+      this.loading.set(false);
     }
-    this.loading.set(true);
-    this.messageService.createHubConnection(currentUser, email);
-    this.loading.set(false);
   }
 
   sendMessage() {

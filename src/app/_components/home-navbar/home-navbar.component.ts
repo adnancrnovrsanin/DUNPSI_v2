@@ -18,6 +18,12 @@ export class HomeNavbarComponent {
   ) {}
 
   goToDashboard() {
-    this.router.navigate(['/dashboard', this.accountService.currentUser()?.id]);
+    const currentUser = this.accountService.currentUser();
+    if (!currentUser) return;
+    if (currentUser.role === 'SOFTWARE_COMPANY') {
+      this.router.navigate(['/projects']);
+    } else {
+      this.router.navigate(['/messages']);
+    }
   }
 }

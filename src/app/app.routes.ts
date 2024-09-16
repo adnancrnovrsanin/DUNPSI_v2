@@ -23,6 +23,10 @@ import { ImagesScreenComponent } from './_screens/images-screen/images-screen.co
 import { ManagerProjectHistoryComponent } from './_screens/manager-project-history/manager-project-history.component';
 import { ProjectHistoryComponent } from './_screens/project-history/project-history.component';
 import { ClientProjectsActionNeededComponent } from './_screens/client-projects-action-needed/client-projects-action-needed.component';
+import { AdminUsersComponent } from './_screens/admin-users/admin-users.component';
+import { AdminCreateDevelopersComponent } from './_screens/admin-create-developers/admin-create-developers.component';
+import { AdminCreateProjectManagersComponent } from './_screens/admin-create-project-managers/admin-create-project-managers.component';
+import { AdminCreateProductManagersComponent } from './_screens/admin-create-product-managers/admin-create-product-managers.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -52,7 +56,10 @@ export const routes: Routes = [
         component: ProjectRequestDetailsComponent,
         resolve: projectRequestDetailedResolver,
       },
-      { path: 'projects/:id', component: ProjectPageComponent },
+      {
+        path: 'projects/history',
+        component: ProjectHistoryComponent,
+      },
       {
         path: 'projects/manager/requests',
         component: ProjectManagerRequestsComponent,
@@ -63,15 +70,25 @@ export const routes: Routes = [
         resolve: projectRequestDetailedResolver,
       },
       {
-        path: 'projects/history',
-        component: ProjectHistoryComponent,
-      },
-      {
         path: 'projects/manager/history/:id',
         component: ManagerProjectHistoryComponent,
       },
+      { path: 'projects/:id', component: ProjectPageComponent },
       { path: 'teams/:id', component: TeamComponent },
       { path: 'images/:id', component: ImagesScreenComponent },
+      { path: 'admin/users', component: AdminUsersComponent },
+      {
+        path: 'admin/create/developers',
+        component: AdminCreateDevelopersComponent,
+      },
+      {
+        path: 'admin/create/project-managers',
+        component: AdminCreateProjectManagersComponent,
+      },
+      {
+        path: 'admin/create/product-managers',
+        component: AdminCreateProductManagersComponent,
+      },
     ],
   },
   { path: 'login', component: LoginComponent },

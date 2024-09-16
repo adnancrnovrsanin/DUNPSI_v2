@@ -23,6 +23,8 @@ import {
   lucideCircleUserRound,
   lucideList,
   lucideImage,
+  lucideLogOut,
+  lucideUser,
 } from '@ng-icons/lucide';
 import { TeamService } from '../../_services/team.service';
 import { ProfileService } from '../../_services/profile.service';
@@ -51,13 +53,15 @@ interface SidebarItem {
       lucideCircleUserRound,
       lucideList,
       lucideImage,
+      lucideLogOut,
+      lucideUser,
     }),
   ],
 })
 export class SidebarComponent implements OnInit {
   constructor(
     public router: Router,
-    private accountService: AccountService,
+    public accountService: AccountService,
     private profileService: ProfileService,
     private projectsService: ProjectsService,
     private messageService: MessageService,
@@ -74,6 +78,41 @@ export class SidebarComponent implements OnInit {
     const currentUser = this.accountService.currentUser();
     const currentProject = this.projectService.selectedProject();
     if (!currentUser) return [];
+
+    if (currentUser.role === Role.ADMIN) {
+      return [
+        {
+          title: 'All Users',
+          link: '/admin/users',
+          icon: 'lucideUser',
+          keyword: 'admin/users',
+        },
+        {
+          title: 'Add Developers',
+          link: '/admin/create/developers',
+          icon: 'lucideUser',
+          keyword: 'admin/create/developers',
+        },
+        {
+          title: 'Add Project Managers',
+          link: '/admin/create/project-managers',
+          icon: 'lucideUser',
+          keyword: 'admin/create/project-managers',
+        },
+        {
+          title: 'Add Product Managers',
+          link: '/admin/create/product-managers',
+          icon: 'lucideUser',
+          keyword: 'admin/create/product-managers',
+        },
+        {
+          title: 'Messages',
+          link: '/messages',
+          icon: 'lucideMessageSquareMore',
+          keyword: 'messages',
+        },
+      ];
+    }
 
     if (currentUser.role === Role.SOFTWARE_COMPANY) {
       return [

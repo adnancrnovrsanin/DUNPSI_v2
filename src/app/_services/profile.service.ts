@@ -1,6 +1,11 @@
 import { Injectable, signal, WritableSignal } from '@angular/core';
-import { environment } from '../../environments/environment.development';
-import { Developer, ProductManager, ProjectManager } from '../_models/profiles';
+import { environment } from '../../environments/environment';
+import {
+  Admin,
+  Developer,
+  ProductManager,
+  ProjectManager,
+} from '../_models/profiles';
 import { HttpClient } from '@angular/common/http';
 import { ProjectService } from './project.service';
 import { ToastrService } from 'ngx-toastr';
@@ -22,6 +27,7 @@ export class ProfileService {
   currentDeveloper: WritableSignal<Developer | null> = signal(null);
   currentProductManager: WritableSignal<ProductManager | null> = signal(null);
   currentProjectManager: WritableSignal<ProjectManager | null> = signal(null);
+  currentAdmin: WritableSignal<Admin | null> = signal(null);
 
   constructor(
     private http: HttpClient,
@@ -30,6 +36,10 @@ export class ProfileService {
     private projectsService: ProjectsService,
     private teamService: TeamService
   ) {}
+
+  getAdmin(userId: string) {
+    return this.http.get<Admin>(this.baseUrl + 'admin/users/admin/' + userId);
+  }
 
   getDeveloper(userId: string) {
     return this.http.get<Developer>(this.baseUrl + 'developer/' + userId);
@@ -63,6 +73,10 @@ export class ProfileService {
     this.currentProjectManager.set(projectManager);
   }
 
+  setCurrentAdmin(admin: Admin) {
+    this.currentAdmin.set(admin);
+  }
+
   getProfile(user: User) {
     const roleActionMap: Partial<Record<Role, (id: string) => Subscription>> = {
       [Role.DEVELOPER]: (id: string) =>
@@ -86,6 +100,10 @@ export class ProfileService {
           if (projectManager.currentTeamId) {
             this.teamService.getTeam(projectManager.currentTeamId);
           }
+        }),
+      [Role.ADMIN]: (id: string) =>
+        this.getAdmin(id).subscribe((admin) => {
+          this.setCurrentAdmin(admin);
         }),
     };
 

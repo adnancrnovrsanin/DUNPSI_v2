@@ -10,15 +10,11 @@ import { InitialProjectRequest } from '../../_models/projectRequest';
   templateUrl: './project-manager-requests.component.html',
   styleUrl: './project-manager-requests.component.scss',
 })
-export class ProjectManagerRequestsComponent implements OnInit {
+export class ProjectManagerRequestsComponent {
   constructor(
     private projectsService: ProjectsService,
     private router: Router
   ) {}
-
-  ngOnInit(): void {
-    
-  }
 
   get projectRequests() {
     return this.projectsService.projectRequests;

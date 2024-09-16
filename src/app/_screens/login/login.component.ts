@@ -29,7 +29,8 @@ export class LoginComponent implements OnDestroy {
 
   constructor(
     private accountService: AccountService,
-    public imageService: ImageService
+    public imageService: ImageService,
+    private router: Router
   ) {}
 
   get email() {
@@ -60,6 +61,10 @@ export class LoginComponent implements OnDestroy {
         this.submitting.set(false);
       },
     });
+  }
+
+  goToHome() {
+    this.router.navigate(['/']);
   }
 
   ngOnDestroy(): void {
