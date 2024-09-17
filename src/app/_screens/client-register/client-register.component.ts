@@ -1,4 +1,4 @@
-import { Component, signal, WritableSignal } from '@angular/core';
+import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { CreateSoftwareCompanyCredentials } from '../../_models/softwareCompany';
 import {
   AbstractControl,
@@ -12,6 +12,7 @@ import { AccountService } from '../../_services/account.service';
 import { ImageService } from '../../_services/image.service';
 import { TextInputComponent } from '../../_forms/text-input/text-input.component';
 import { Router } from '@angular/router';
+import { initFlowbite } from 'flowbite';
 
 @Component({
   selector: 'app-client-register',
@@ -20,7 +21,7 @@ import { Router } from '@angular/router';
   templateUrl: './client-register.component.html',
   styleUrl: './client-register.component.scss',
 })
-export class ClientRegisterComponent {
+export class ClientRegisterComponent implements OnInit {
   validationErrors: WritableSignal<string[] | null> = signal(null);
   loading: WritableSignal<boolean> = signal(false);
 
@@ -29,6 +30,10 @@ export class ClientRegisterComponent {
     public imageService: ImageService,
     private router: Router
   ) {}
+
+  ngOnInit(): void {
+    initFlowbite();
+  }
 
   registrationForm = new FormGroup({
     representativeName: new FormControl('', [

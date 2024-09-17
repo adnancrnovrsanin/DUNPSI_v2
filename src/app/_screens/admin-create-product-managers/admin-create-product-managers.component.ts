@@ -1,4 +1,4 @@
-import { Component, signal, WritableSignal } from '@angular/core';
+import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import {
   AbstractControl,
   FormControl,
@@ -14,6 +14,7 @@ import {
 } from '../../_models/profiles';
 import { AdminService } from '../../_services/admin.service';
 import { ToastrService } from 'ngx-toastr';
+import { initFlowbite } from 'flowbite';
 
 @Component({
   selector: 'app-admin-create-product-managers',
@@ -22,7 +23,7 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './admin-create-product-managers.component.html',
   styleUrl: './admin-create-product-managers.component.scss',
 })
-export class AdminCreateProductManagersComponent {
+export class AdminCreateProductManagersComponent implements OnInit {
   loading: WritableSignal<boolean> = signal(false);
   newProductManagerForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(2)]),
@@ -45,6 +46,10 @@ export class AdminCreateProductManagersComponent {
     private adminService: AdminService,
     private toastr: ToastrService
   ) {}
+
+  ngOnInit(): void {
+    initFlowbite();
+  }
 
   matchValues(matchTo: string): ValidatorFn {
     return (control: AbstractControl) => {

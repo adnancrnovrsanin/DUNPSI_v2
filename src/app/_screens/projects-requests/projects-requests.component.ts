@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ProjectsService } from '../../_services/projects.service';
 import { Router } from '@angular/router';
 import { InitialProjectRequest } from '../../_models/projectRequest';
+import { initFlowbite } from 'flowbite';
 
 @Component({
   selector: 'app-projects-requests',
@@ -18,6 +19,7 @@ export class ProjectsRequestsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    initFlowbite();
     this.projectsService.getProjectRequests();
   }
 

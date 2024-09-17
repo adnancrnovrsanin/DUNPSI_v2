@@ -1,4 +1,4 @@
-import { Component, signal, WritableSignal } from '@angular/core';
+import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { TextInputComponent } from '../../_forms/text-input/text-input.component';
 import {
   AbstractControl,
@@ -11,6 +11,7 @@ import {
 import { CreateDeveloperDto } from '../../_models/profiles';
 import { AdminService } from '../../_services/admin.service';
 import { ToastrService } from 'ngx-toastr';
+import { initFlowbite } from 'flowbite';
 
 @Component({
   selector: 'app-admin-create-developers',
@@ -19,7 +20,7 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './admin-create-developers.component.html',
   styleUrl: './admin-create-developers.component.scss',
 })
-export class AdminCreateDevelopersComponent {
+export class AdminCreateDevelopersComponent implements OnInit {
   loading: WritableSignal<boolean> = signal(false);
   newDeveloperForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(2)]),
@@ -46,6 +47,10 @@ export class AdminCreateDevelopersComponent {
     private adminService: AdminService,
     private toastr: ToastrService
   ) {}
+
+  ngOnInit(): void {
+    initFlowbite();
+  }
 
   matchValues(matchTo: string): ValidatorFn {
     return (control: AbstractControl) => {

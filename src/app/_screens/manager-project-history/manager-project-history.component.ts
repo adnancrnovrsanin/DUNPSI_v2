@@ -1,4 +1,4 @@
-import { Component, signal, WritableSignal } from '@angular/core';
+import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ProfileService } from '../../_services/profile.service';
 import {
@@ -8,6 +8,7 @@ import {
 } from '../../_models/softwareProject';
 import { ProjectsService } from '../../_services/projects.service';
 import { ToastrService } from 'ngx-toastr';
+import { initFlowbite } from 'flowbite';
 
 @Component({
   selector: 'app-manager-project-history',
@@ -16,7 +17,7 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './manager-project-history.component.html',
   styleUrl: './manager-project-history.component.scss',
 })
-export class ManagerProjectHistoryComponent {
+export class ManagerProjectHistoryComponent implements OnInit {
   id: WritableSignal<string | null> = signal(null);
   projectHistory: WritableSignal<Project[]> = signal([]);
 
@@ -48,5 +49,9 @@ export class ManagerProjectHistoryComponent {
         });
       }
     }
+  }
+
+  ngOnInit(): void {
+    initFlowbite();
   }
 }

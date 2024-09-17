@@ -1,8 +1,9 @@
-import { Component, signal, WritableSignal } from '@angular/core';
+import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { AdminService } from '../../_services/admin.service';
 import { User } from '../../_models/user';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { initFlowbite } from 'flowbite';
 
 @Component({
   selector: 'app-admin-users',
@@ -11,7 +12,7 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './admin-users.component.html',
   styleUrl: './admin-users.component.scss',
 })
-export class AdminUsersComponent {
+export class AdminUsersComponent implements OnInit {
   users: WritableSignal<User[]> = signal([]);
   loading: WritableSignal<boolean> = signal(false);
 
@@ -21,6 +22,10 @@ export class AdminUsersComponent {
     private adminService: AdminService,
     private toastr: ToastrService
   ) {}
+
+  ngOnInit(): void {
+    initFlowbite();
+  }
 
   searchUsers() {
     if (this.query.trim() === '' || this.loading()) return;

@@ -20,6 +20,7 @@ import { NgClass } from '@angular/common';
 import { TimeAgoPipe } from '../../_pipes/time-ago.pipe';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { lucideCheckCheck } from '@ng-icons/lucide';
+import { initFlowbite } from 'flowbite';
 
 @Component({
   selector: 'app-chat-page',
@@ -70,6 +71,7 @@ export class ChatPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    initFlowbite();
     const email = this.email();
     const currentUser = this.accountService.currentUser();
     if (email && currentUser) {

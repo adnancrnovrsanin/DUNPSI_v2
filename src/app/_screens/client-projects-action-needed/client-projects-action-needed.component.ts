@@ -6,6 +6,7 @@ import {
 import { SoftwareCompanyService } from '../../_services/software-company.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { initFlowbite } from 'flowbite';
 
 @Component({
   selector: 'app-client-projects-action-needed',
@@ -24,6 +25,7 @@ export class ClientProjectsActionNeededComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    initFlowbite();
     this.softwareCompanyService
       .getCompanyProjectsWhereActionNeeded()
       ?.subscribe({

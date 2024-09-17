@@ -29,7 +29,7 @@ import { TextInputComponent } from '../../_forms/text-input/text-input.component
 import { TextareaInputComponent } from '../../_forms/textarea-input/textarea-input.component';
 import { ProfileService } from '../../_services/profile.service';
 
-import { Modal } from 'flowbite';
+import { initFlowbite, Modal } from 'flowbite';
 import type { ModalOptions, ModalInterface } from 'flowbite';
 import type { InstanceOptions } from 'flowbite';
 
@@ -78,6 +78,7 @@ export class RequirementsScreenComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    initFlowbite();
     const user = this.accountService.currentUser();
     if (user) {
       if (user.role === 'PROJECT_MANAGER') {

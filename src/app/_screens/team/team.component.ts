@@ -17,6 +17,7 @@ import { ProfileService } from '../../_services/profile.service';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { lucidePlus } from '@ng-icons/lucide';
 import { FormsModule } from '@angular/forms';
+import { initFlowbite } from 'flowbite';
 
 @Component({
   selector: 'app-team',
@@ -100,6 +101,7 @@ export class TeamComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    initFlowbite();
     this.teamService.getFreeDevelopers().subscribe({
       next: (developers) => {
         this.freeDevelopersList.set(developers);

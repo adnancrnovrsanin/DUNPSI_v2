@@ -1,8 +1,9 @@
-import { Component, signal, WritableSignal } from '@angular/core';
+import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { ProjectsService } from '../../_services/projects.service';
 import { ActivatedRoute } from '@angular/router';
 import { ProjectCreateDto } from '../../_models/softwareProject';
 import { InitialProjectRequest } from '../../_models/projectRequest';
+import { initFlowbite } from 'flowbite';
 
 @Component({
   selector: 'app-project-request-details',
@@ -11,7 +12,7 @@ import { InitialProjectRequest } from '../../_models/projectRequest';
   templateUrl: './project-request-details.component.html',
   styleUrl: './project-request-details.component.scss',
 })
-export class ProjectRequestDetailsComponent {
+export class ProjectRequestDetailsComponent implements OnInit {
   id: string | null = null;
   selectedManager: WritableSignal<string | null> = signal(null);
 
@@ -23,6 +24,7 @@ export class ProjectRequestDetailsComponent {
   }
 
   ngOnInit(): void {
+    initFlowbite();
     if (this.id) {
       this.projectsService.getProjectRequest(this.id);
       this.projectsService.getfreeProjectManagersForProject();

@@ -17,7 +17,7 @@ import {
   Validators,
 } from '@angular/forms';
 
-import { Datepicker } from 'flowbite';
+import { Datepicker, initFlowbite } from 'flowbite';
 import { ToastrService } from 'ngx-toastr';
 import { TextInputComponent } from '../../_forms/text-input/text-input.component';
 import { TextareaInputComponent } from '../../_forms/textarea-input/textarea-input.component';
@@ -36,7 +36,7 @@ import { CreateInitialProjectRequest } from '../../_models/projectRequest';
   styleUrl: './client-projects.component.scss',
   viewProviders: [provideIcons({ lucideCalendar })],
 })
-export class ClientProjectsComponent {
+export class ClientProjectsComponent implements OnInit {
   newProjectForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(3)]),
     description: new FormControl('', [
@@ -63,6 +63,10 @@ export class ClientProjectsComponent {
   }
 
   constructor(public softwareCompanyService: SoftwareCompanyService) {}
+
+  ngOnInit(): void {
+    initFlowbite();
+  }
 
   link(project: Project) {}
 

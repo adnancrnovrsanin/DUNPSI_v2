@@ -5,6 +5,7 @@ import {
   projectStatusFromString,
 } from '../../_models/softwareProject';
 import { Router } from '@angular/router';
+import { initFlowbite } from 'flowbite';
 
 @Component({
   selector: 'app-company-projects',
@@ -22,6 +23,7 @@ export class CompanyProjectsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    initFlowbite();
     this.projectsService.getAllActiveProjects().subscribe({
       next: (data) => {
         this.projects.set(

@@ -29,7 +29,7 @@ import { AvatarComponent } from '../../_components/avatar/avatar.component';
 import { UserSearchAutocompleteComponent } from '../../_components/user-search-autocomplete/user-search-autocomplete.component';
 import { ToastrService } from 'ngx-toastr';
 import { ProfileService } from '../../_services/profile.service';
-import { Modal } from 'flowbite';
+import { initFlowbite, Modal } from 'flowbite';
 import { Router } from '@angular/router';
 
 @Component({
@@ -113,6 +113,7 @@ export class MessagesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    initFlowbite();
     this.loadMessages();
     this.loadAllUsers();
   }

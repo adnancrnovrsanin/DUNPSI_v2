@@ -9,6 +9,7 @@ import { User } from '../_models/user';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { take } from 'rxjs';
+import { AccountService } from './account.service';
 
 @Injectable({
   providedIn: 'root',
@@ -46,25 +47,11 @@ export class PresenceService {
     });
 
     this.hubConnection.on('NewMessageReceived', ({ email, fullName }) => {
-      // this.accountService.getUserByEmail(email).subscribe({
-      //   next: user => {
-      //     if (user) {
-      //       this.currentUser = user;
-      //       this.toastr.info(fullName + ' has sent you a new message! Click me to see it')
-      //         .onTap
-      //         .pipe(take(1))
-      //         .subscribe({
-      //           next: () => this.router.navigateByUrl('/dashboard/' + user.id + '?tab=Messages')
-      //         })
-      //     }
-      //   }
-      // });
       this.toastr
         .info(fullName + ' has sent you a new message! Click me to see it')
         .onTap.pipe(take(1))
         .subscribe({
-          next: () =>
-            this.router.navigateByUrl('/dashboard/' + email + '?tab=Messages'),
+          next: () => this.router.navigate(['/messages']),
         });
     });
   }

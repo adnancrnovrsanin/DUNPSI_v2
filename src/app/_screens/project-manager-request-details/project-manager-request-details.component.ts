@@ -1,4 +1,4 @@
-import { Component, signal, WritableSignal } from '@angular/core';
+import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { ProjectsService } from '../../_services/projects.service';
 import { ActivatedRoute } from '@angular/router';
 import { InitialProjectRequest } from '../../_models/projectRequest';
@@ -9,6 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ProjectCreateDto, ProjectDto } from '../../_models/softwareProject';
 import { AvatarComponent } from '../../_components/avatar/avatar.component';
 import { Role, User } from '../../_models/user';
+import { initFlowbite } from 'flowbite';
 
 @Component({
   selector: 'app-project-manager-request-details',
@@ -17,7 +18,7 @@ import { Role, User } from '../../_models/user';
   templateUrl: './project-manager-request-details.component.html',
   styleUrl: './project-manager-request-details.component.scss',
 })
-export class ProjectManagerRequestDetailsComponent {
+export class ProjectManagerRequestDetailsComponent implements OnInit {
   id: string | null = null;
   freeDevelopers: WritableSignal<Developer[]> = signal([]);
   selectedDevelopers: WritableSignal<Developer[]> = signal([]);
@@ -32,6 +33,7 @@ export class ProjectManagerRequestDetailsComponent {
   }
 
   ngOnInit(): void {
+    initFlowbite();
     if (this.id) {
       this.projectsService.getProjectRequest(this.id);
       this.teamService.getFreeDevelopers().subscribe({

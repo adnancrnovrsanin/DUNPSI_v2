@@ -1,4 +1,10 @@
-import { Component, OnDestroy, signal, WritableSignal } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  signal,
+  WritableSignal,
+} from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -11,6 +17,7 @@ import { ProfileService } from '../../_services/profile.service';
 import { LoginDto } from '../../_dtos/AuthDtos';
 import { TextInputComponent } from '../../_forms/text-input/text-input.component';
 import { ImageService } from '../../_services/image.service';
+import { initFlowbite } from 'flowbite';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +26,7 @@ import { ImageService } from '../../_services/image.service';
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
-export class LoginComponent implements OnDestroy {
+export class LoginComponent implements OnInit, OnDestroy {
   validationErrors: WritableSignal<string[] | null> = signal(null);
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -32,6 +39,10 @@ export class LoginComponent implements OnDestroy {
     public imageService: ImageService,
     private router: Router
   ) {}
+
+  ngOnInit(): void {
+    initFlowbite();
+  }
 
   get email() {
     return this.loginForm.get('email');

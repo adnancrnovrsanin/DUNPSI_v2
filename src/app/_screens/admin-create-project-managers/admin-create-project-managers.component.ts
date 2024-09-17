@@ -1,4 +1,4 @@
-import { Component, signal, WritableSignal } from '@angular/core';
+import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import {
   AbstractControl,
   FormControl,
@@ -14,6 +14,7 @@ import {
 } from '../../_models/profiles';
 import { AdminService } from '../../_services/admin.service';
 import { ToastrService } from 'ngx-toastr';
+import { initFlowbite } from 'flowbite';
 
 @Component({
   selector: 'app-admin-create-project-managers',
@@ -22,7 +23,7 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './admin-create-project-managers.component.html',
   styleUrl: './admin-create-project-managers.component.scss',
 })
-export class AdminCreateProjectManagersComponent {
+export class AdminCreateProjectManagersComponent implements OnInit {
   loading: WritableSignal<boolean> = signal(false);
   newProjectManagerForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(2)]),
@@ -53,6 +54,10 @@ export class AdminCreateProjectManagersComponent {
     private adminService: AdminService,
     private toastr: ToastrService
   ) {}
+
+  ngOnInit(): void {
+    initFlowbite();
+  }
 
   matchValues(matchTo: string): ValidatorFn {
     return (control: AbstractControl) => {

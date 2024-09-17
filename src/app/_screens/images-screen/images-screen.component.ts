@@ -9,6 +9,7 @@ import { DecimalPipe, NgClass, NgStyle } from '@angular/common';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { lucideTrash2, lucideUpload } from '@ng-icons/lucide';
 import { ToastrService } from 'ngx-toastr';
+import { initFlowbite } from 'flowbite';
 
 @Component({
   selector: 'app-images-screen',
@@ -18,7 +19,7 @@ import { ToastrService } from 'ngx-toastr';
   styleUrl: './images-screen.component.scss',
   viewProviders: [provideIcons({ lucideTrash2, lucideUpload })],
 })
-export class ImagesScreenComponent {
+export class ImagesScreenComponent implements OnInit {
   id: WritableSignal<string | null> = signal(null);
   inputUser: WritableSignal<User | null> = signal(null);
   baseUrl = environment.apiUrl;
@@ -42,6 +43,10 @@ export class ImagesScreenComponent {
         },
       });
     }
+  }
+
+  ngOnInit(): void {
+    initFlowbite();
   }
 
   fileOverBase(e: any) {

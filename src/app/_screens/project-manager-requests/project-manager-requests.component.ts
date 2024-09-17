@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ProjectsService } from '../../_services/projects.service';
 import { Router } from '@angular/router';
 import { InitialProjectRequest } from '../../_models/projectRequest';
+import { initFlowbite } from 'flowbite';
 
 @Component({
   selector: 'app-project-manager-requests',
@@ -10,11 +11,15 @@ import { InitialProjectRequest } from '../../_models/projectRequest';
   templateUrl: './project-manager-requests.component.html',
   styleUrl: './project-manager-requests.component.scss',
 })
-export class ProjectManagerRequestsComponent {
+export class ProjectManagerRequestsComponent implements OnInit {
   constructor(
     private projectsService: ProjectsService,
     private router: Router
   ) {}
+
+  ngOnInit(): void {
+    initFlowbite();
+  }
 
   get projectRequests() {
     return this.projectsService.projectRequests;

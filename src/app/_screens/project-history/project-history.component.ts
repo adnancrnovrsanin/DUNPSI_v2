@@ -6,6 +6,7 @@ import {
   projectStatusFromString,
 } from '../../_models/softwareProject';
 import { ToastrService } from 'ngx-toastr';
+import { initFlowbite } from 'flowbite';
 
 @Component({
   selector: 'app-project-history',
@@ -23,6 +24,7 @@ export class ProjectHistoryComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    initFlowbite();
     this.projectsService.getCompanyProjectHistory().subscribe({
       next: (data: ProjectDto[]) => {
         this.projectHistory.set(
