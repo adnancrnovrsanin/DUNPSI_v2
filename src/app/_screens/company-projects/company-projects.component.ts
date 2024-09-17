@@ -1,6 +1,9 @@
 import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { ProjectsService } from '../../_services/projects.service';
-import { Project, projectStatusFromString } from '../../_models/softwareProject';
+import {
+  Project,
+  projectStatusFromString,
+} from '../../_models/softwareProject';
 import { Router } from '@angular/router';
 
 @Component({
@@ -19,7 +22,7 @@ export class CompanyProjectsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.projectsService.getAllProjects().subscribe({
+    this.projectsService.getAllActiveProjects().subscribe({
       next: (data) => {
         this.projects.set(
           data.map((project) => ({

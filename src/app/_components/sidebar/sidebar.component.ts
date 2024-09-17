@@ -203,7 +203,7 @@ export class SidebarComponent implements OnInit {
     if (currentUser.role === Role.PRODUCT_MANAGER) {
       return [
         {
-          title: 'All Company Projects',
+          title: 'All Active Projects',
           link: `/company/projects`,
           icon: 'lucideSquareKanban',
           keyword: 'company/projects',

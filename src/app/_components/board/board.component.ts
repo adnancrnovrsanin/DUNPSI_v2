@@ -92,6 +92,33 @@ export class BoardComponent implements OnInit, OnDestroy {
     return requirement.assignedDevelopers;
   });
 
+  canProjectBeFinished: Signal<boolean> = computed(() => {
+    let canItBeFinished = true;
+    for (let phase in this.projectService.selectedProjectPhases()) {
+      if (
+        this.projectService.selectedProjectPhases()[phase].requirements.length >
+          0 &&
+        this.projectService.selectedProjectPhases()[phase].name !== 'Done'
+      ) {
+        canItBeFinished = false;
+        break;
+      }
+    }
+    return canItBeFinished;
+  });
+
+  projectIsFinished: Signal<boolean> = computed(() => {
+    const project = this.projectService.selectedProject();
+    if (!project) return false;
+    return project.status === ProjectStatus.COMPLETED;
+  });
+
+  projectIsActive: Signal<boolean> = computed(() => {
+    const project = this.projectService.selectedProject();
+    if (!project) return false;
+    return project.status === ProjectStatus.ACTIVE;
+  });
+
   newProjectPhaseForm = new FormGroup({
     serialNumber: new FormControl(0, [Validators.required]),
     name: new FormControl('', [Validators.required]),
@@ -448,6 +475,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   completeTheProject() {
     const id = this.id();
     if (!id) return;
+    this.loading.set(true);
     this.projectService.completeProject(id)?.subscribe({
       next: () => {
         this.toastr.success('Project completed');
@@ -455,10 +483,13 @@ export class BoardComponent implements OnInit, OnDestroy {
           if (!project) return null;
           return { ...project, status: ProjectStatus.COMPLETED };
         });
+        this.router.navigate(['/projects']);
+        this.loading.set(false);
       },
       error: (error) => {
         console.log(error);
         this.toastr.error(error);
+        this.loading.set(false);
       },
     });
   }

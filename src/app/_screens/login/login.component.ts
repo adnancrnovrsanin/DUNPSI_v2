@@ -20,7 +20,7 @@ import { ImageService } from '../../_services/image.service';
   styleUrl: './login.component.scss',
 })
 export class LoginComponent implements OnDestroy {
-  validationErrors: string[] | undefined;
+  validationErrors: WritableSignal<string[] | null> = signal(null);
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required]),
@@ -42,22 +42,21 @@ export class LoginComponent implements OnDestroy {
   }
 
   login() {
-    console.log(this.email?.value);
-    console.log(this.password?.value);
     if (this.email?.value == null || this.password?.value == null) return;
     const loginCreds: LoginDto = {
-      email: this.email.value,
-      password: this.password.value,
+      email: this.email.value ?? '',
+      password: this.password.value ?? '',
     };
 
     this.submitting.set(true);
+    this.validationErrors.set(null);
     this.accountService.login(loginCreds).subscribe({
       next: (_) => {
         console.log('Login successful');
       },
       error: (err) => {
-        console.log(err);
-        this.validationErrors = err;
+        console.log(err.error);
+        this.validationErrors.set([err.error]);
         this.submitting.set(false);
       },
     });

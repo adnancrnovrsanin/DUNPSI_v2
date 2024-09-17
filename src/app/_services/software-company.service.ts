@@ -12,7 +12,7 @@ import {
 import { CreateInitialProjectRequest } from '../_models/projectRequest';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',

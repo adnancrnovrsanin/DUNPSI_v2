@@ -17,7 +17,7 @@ import {
   GetRequirementsOnHoldRequest,
   Requirement,
 } from '../_models/requirement';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',

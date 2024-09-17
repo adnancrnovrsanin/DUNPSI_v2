@@ -10,7 +10,11 @@
     [placeholder]="placeholder"
     [formControl]="control"
   />
-  @if (control.touched && control.errors?.['required']) {
+  @if (control.touched && control.errors?.['email']) {
+  <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+    {{ label }} has to be a valid email
+  </p>
+  } @if (control.touched && control.errors?.['required']) {
   <p class="mt-2 text-sm text-red-600 dark:text-red-500">
     {{ label }} is required
   </p>

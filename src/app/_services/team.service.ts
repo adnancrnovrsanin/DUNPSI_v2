@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { Developer } from '../_models/profiles';
 import { Rating, RatingDto } from '../_models/rating';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -13,10 +13,7 @@ export class TeamService {
   baseUrl = environment.apiUrl;
   selectedTeam: WritableSignal<Team | null> = signal(null);
 
-  constructor(
-    private http: HttpClient,
-    private toastr: ToastrService
-  ) {}
+  constructor(private http: HttpClient, private toastr: ToastrService) {}
 
   getTeam(id: string) {
     this.http.get<Team>(this.baseUrl + 'team/' + id).subscribe({

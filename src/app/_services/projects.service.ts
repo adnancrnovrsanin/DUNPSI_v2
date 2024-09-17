@@ -14,7 +14,7 @@ import {
   projectStatusFromString,
 } from '../_models/softwareProject';
 import { Router } from '@angular/router';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -31,8 +31,8 @@ export class ProjectsService {
     private router: Router
   ) {}
 
-  getAllProjects() {
-    return this.http.get<ProjectDto[]>(this.baseUrl + 'softwareProject');
+  getAllActiveProjects() {
+    return this.http.get<ProjectDto[]>(this.baseUrl + 'softwareProject/active');
   }
 
   getProjectRequests() {

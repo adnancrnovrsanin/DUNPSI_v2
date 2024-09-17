@@ -74,15 +74,13 @@
             [label]="'Company web address'"
           ></app-text-input>
 
-          @if (validationErrors) {
-          <div class="row">
-            <ul class="text-danger">
-              @for (error of validationErrors; track $index) {
-              <li>
-                {{ error }}
-              </li>
-              }
-            </ul>
+          @if (validationErrors()) {
+          <div class="flex flex-col items-center gap-4">
+            @for (error of validationErrors(); track $index) {
+            <p class="text-red-500 font-semibold">
+              {{ error }}
+            </p>
+            }
           </div>
           } @if (loading()) {
           <button

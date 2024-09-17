@@ -21,7 +21,7 @@ import { Router } from '@angular/router';
   styleUrl: './client-register.component.scss',
 })
 export class ClientRegisterComponent {
-  validationErrors: string[] | undefined;
+  validationErrors: WritableSignal<string[] | null> = signal(null);
   loading: WritableSignal<boolean> = signal(false);
 
   constructor(
@@ -111,6 +111,7 @@ export class ClientRegisterComponent {
       web: this.web?.value ?? '',
     };
 
+    this.validationErrors.set(null);
     this.accountService.createSoftwareCompany(registrationData).subscribe({
       next: () => {
         console.log('Registration successful');
@@ -118,9 +119,9 @@ export class ClientRegisterComponent {
         this.loading.set(false);
         this.router.navigate(['/projects']);
       },
-      error: (error) => {
-        console.log(error);
-        this.validationErrors = error;
+      error: (errors) => {
+        console.log(errors);
+        this.validationErrors.set(errors);
         this.loading.set(false);
       },
     });
