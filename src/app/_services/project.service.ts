@@ -16,8 +16,10 @@ import {
   CreateRequirementRequest,
   GetRequirementsOnHoldRequest,
   Requirement,
+  RequirementDto,
 } from '../_models/requirement';
 import { environment } from '../../environments/environment';
+import { CreateRatingRequest } from '../_models/rating';
 
 @Injectable({
   providedIn: 'root',
@@ -122,14 +124,14 @@ export class ProjectService {
   }
 
   getRequirementsByStatus(status: string) {
-    return this.http.get<Requirement[]>(
+    return this.http.get<RequirementDto[]>(
       this.baseUrl + 'requirements/' + status
     );
   }
 
   getRequirementsOnHold(request: GetRequirementsOnHoldRequest) {
     if (!this.selectedProject) return;
-    return this.http.post<Requirement[]>(
+    return this.http.post<RequirementDto[]>(
       this.baseUrl +
         'softwareProject/requirements/' +
         this.selectedProject()?.id,
@@ -153,6 +155,16 @@ export class ProjectService {
 
   updateRequirement(requirement: Requirement) {
     return this.http.put<void>(this.baseUrl + 'requirements', requirement);
+  }
+
+  getUnratedRequirements(projectId: string) {
+    return this.http.get<RequirementDto[]>(
+      this.baseUrl + `requirements/project/${projectId}/unrated`
+    );
+  }
+
+  rateRequirement(rating: CreateRatingRequest) {
+    return this.http.post<void>(this.baseUrl + 'rating', rating);
   }
 
   createProjectPhase(projectPhase: CreateProjectPhaseRequest) {

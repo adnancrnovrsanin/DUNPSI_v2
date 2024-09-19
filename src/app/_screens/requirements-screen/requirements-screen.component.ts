@@ -12,6 +12,7 @@ import {
 import {
   GetRequirementsOnHoldRequest,
   Requirement,
+  RequirementDto,
 } from '../../_models/requirement';
 import {
   FormControl,
@@ -98,8 +99,13 @@ export class RequirementsScreenComponent implements OnInit {
     };
 
     this.projectService.getRequirementsOnHold(firstReq)?.subscribe({
-      next: (requirements: Requirement[]) => {
-        this.requirementsForApproval.set(requirements);
+      next: (requirements: RequirementDto[]) => {
+        this.requirementsForApproval.set(
+          requirements.map((req) => ({
+            ...req,
+            createdAt: new Date(req.createdAt),
+          }))
+        );
       },
       error: (err: any) => {
         console.log(err);
@@ -112,8 +118,13 @@ export class RequirementsScreenComponent implements OnInit {
     };
 
     this.projectService.getRequirementsOnHold(secondReq)?.subscribe({
-      next: (requirements: Requirement[]) => {
-        this.requirementsForEdit.set(requirements);
+      next: (requirements: RequirementDto[]) => {
+        this.requirementsForEdit.set(
+          requirements.map((req) => ({
+            ...req,
+            createdAt: new Date(req.createdAt),
+          }))
+        );
       },
       error: (err: any) => {
         console.log(err);
@@ -125,8 +136,13 @@ export class RequirementsScreenComponent implements OnInit {
     this.projectService
       .getRequirementsByStatus('WAITING_PRODUCT_MANAGER_APPROVAL')
       .subscribe({
-        next: (requirements: Requirement[]) => {
-          this.requirementsForApproval.set(requirements);
+        next: (requirements: RequirementDto[]) => {
+          this.requirementsForApproval.set(
+            requirements.map((req) => ({
+              ...req,
+              createdAt: new Date(req.createdAt),
+            }))
+          );
         },
         error: (err: any) => {
           console.log(err);
@@ -135,8 +151,13 @@ export class RequirementsScreenComponent implements OnInit {
     this.projectService
       .getRequirementsByStatus('WAITING_PRODUCT_MANAGER_CHANGES')
       .subscribe({
-        next: (requirements: Requirement[]) => {
-          this.requirementsForEdit.set(requirements);
+        next: (requirements: RequirementDto[]) => {
+          this.requirementsForEdit.set(
+            requirements.map((req) => ({
+              ...req,
+              createdAt: new Date(req.createdAt),
+            }))
+          );
         },
         error: (err: any) => {
           console.log(err);

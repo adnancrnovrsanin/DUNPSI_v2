@@ -27,6 +27,7 @@ import { AdminUsersComponent } from './_screens/admin-users/admin-users.componen
 import { AdminCreateDevelopersComponent } from './_screens/admin-create-developers/admin-create-developers.component';
 import { AdminCreateProjectManagersComponent } from './_screens/admin-create-project-managers/admin-create-project-managers.component';
 import { AdminCreateProductManagersComponent } from './_screens/admin-create-product-managers/admin-create-product-managers.component';
+import { UnratedRequirementsComponent } from './_screens/unrated-requirements/unrated-requirements.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -46,6 +47,10 @@ export const routes: Routes = [
         component: ClientProjectsActionNeededComponent,
       },
       { path: 'company/projects', component: CompanyProjectsComponent },
+      {
+        path: 'requirements/unrated',
+        component: UnratedRequirementsComponent,
+      },
       {
         path: 'requirements',
         component: RequirementsScreenComponent,

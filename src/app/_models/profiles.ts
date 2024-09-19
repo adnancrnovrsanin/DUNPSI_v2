@@ -37,6 +37,8 @@ export interface Developer {
   surname: string;
   email: string;
   profileImageUrl?: string;
+  qualityRating: number;
+  ratingCount: number;
   position: string;
   numberOfActiveTasks: number;
 }

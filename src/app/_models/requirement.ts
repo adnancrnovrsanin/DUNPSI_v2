@@ -11,6 +11,24 @@ export interface Requirement {
   idNumber: number;
   type: RequirementType;
   priority: RequirementPriority;
+  estimate: number;
+  createdAt: Date;
+  assignedDevelopers: Developer[];
+}
+
+export interface RequirementDto {
+  id: string;
+  projectId: string;
+  phaseId: string;
+  name: string;
+  description: string;
+  status: RequirementApproveStatus;
+  serialNumber: number;
+  idNumber: number;
+  type: RequirementType;
+  priority: RequirementPriority;
+  estimate: number;
+  createdAt: string;
   assignedDevelopers: Developer[];
 }
 
@@ -22,6 +40,7 @@ export interface CreateRequirementRequest {
   serialNumber: number;
   type: string;
   priority: number;
+  estimate: number;
 }
 
 export enum RequirementApproveStatus {

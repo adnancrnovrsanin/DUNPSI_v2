@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { FooterComponent } from './_components/footer/footer.component';
@@ -35,6 +35,11 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     initFlowbite();
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        initFlowbite();
+      }
+    });
     this.setCurrentUser();
   }
 

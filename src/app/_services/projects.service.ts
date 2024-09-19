@@ -194,7 +194,7 @@ export class ProjectsService {
   rejectManagerRequest(projectRequest: InitialProjectRequest) {
     return this.http
       .put<void>(
-        this.baseUrl + 'softwareProject/reject-manager-request',
+        this.baseUrl + 'softwareProject/manager-requests/reject',
         projectRequest
       )
       .subscribe({

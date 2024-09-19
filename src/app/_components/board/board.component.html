@@ -172,6 +172,18 @@
 
               <div class="sm:col-span-2">
                 <app-text-input
+                  [label]="'Requirement estimate'"
+                  [placeholder]="'Enter requirement estimate'"
+                  [name]="'estimate'"
+                  [type]="'number'"
+                  [formControl]="
+                    $any(createRequirementForm.controls['estimate'])
+                  "
+                />
+              </div>
+
+              <div class="sm:col-span-2">
+                <app-text-input
                   [label]="'Requirement name'"
                   [placeholder]="'Enter requirement name'"
                   [name]="'name'"
@@ -185,7 +197,7 @@
                   "
                   [label]="'Description'"
                   [name]="'description'"
-                  [placeholder]="'Enter phase description'"
+                  [placeholder]="'Enter requirement description'"
                 />
               </div>
             </div>
@@ -219,7 +231,7 @@
               type="submit"
               class="w-full text-white text-center bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
             >
-              Create a new project phase
+              Create a new requirement
             </button>
             }
           </form>

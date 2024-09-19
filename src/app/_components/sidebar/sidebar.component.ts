@@ -186,6 +186,12 @@ export class SidebarComponent implements OnInit {
           keyword: 'history',
         },
         {
+          title: 'Unrated Requirements',
+          link: '/requirements/unrated',
+          icon: 'lucideList',
+          keyword: 'requirements/unrated',
+        },
+        {
           title: 'Images',
           link: `/images/${currentUser.id}`,
           icon: 'lucideImage',

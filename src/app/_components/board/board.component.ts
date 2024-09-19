@@ -52,6 +52,7 @@ import { RequirementPriorityComponent } from '../requirement-priority/requiremen
 import { RequirementTypeIconComponent } from '../requirement-type-icon/requirement-type-icon.component';
 import { NgIconComponent } from '@ng-icons/core';
 import { ProjectStatus } from '../../_models/softwareProject';
+import { initFlowbite } from 'flowbite';
 
 @Component({
   selector: 'app-board',
@@ -132,6 +133,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     ]),
     requirementType: new FormControl('USER_STORY', [Validators.required]),
     requirementPriority: new FormControl(3, [Validators.required]),
+    estimate: new FormControl(0, [Validators.required]),
   });
 
   get phaseSerialNumber() {
@@ -154,6 +156,10 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
   get requirementPriority() {
     return this.createRequirementForm.get('requirementPriority');
+  }
+
+  get estimate() {
+    return this.createRequirementForm.get('estimate');
   }
 
   get requirementTypes() {
@@ -293,6 +299,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       serialNumber: 0,
       type: this.requirementType?.value ?? 'USER_STORY',
       priority: this.requirementPriority?.value ?? 3,
+      estimate: this.estimate?.value ?? 0,
     };
 
     this.projectService.createRequirement(createRequirementRequest).subscribe({
@@ -322,6 +329,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    initFlowbite();
     const id = this.id();
     if (id) {
       this.projectService.getProject(id);
