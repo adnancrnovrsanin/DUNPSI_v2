@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ProjectsService } from '../../_services/projects.service';
 import { Router } from '@angular/router';
 import { InitialProjectRequest } from '../../_models/projectRequest';
@@ -10,6 +10,7 @@ import { initFlowbite } from 'flowbite';
   imports: [],
   templateUrl: './project-manager-requests.component.html',
   styleUrl: './project-manager-requests.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectManagerRequestsComponent implements OnInit {
   constructor(

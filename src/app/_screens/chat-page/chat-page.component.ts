@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   computed,
   OnDestroy,
@@ -35,6 +36,7 @@ import { initFlowbite } from 'flowbite';
   templateUrl: './chat-page.component.html',
   styleUrl: './chat-page.component.scss',
   viewProviders: [provideIcons({ lucideCheckCheck })],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatPageComponent implements OnInit, OnDestroy {
   email: WritableSignal<string | null> = signal(null);

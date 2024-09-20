@@ -123,6 +123,12 @@ export class SidebarComponent implements OnInit {
           keyword: 'projects',
         },
         {
+          title: 'Pending Project Requests',
+          link: '/requests/pending',
+          icon: 'lucideFileQuestion',
+          keyword: 'requests/pending',
+        },
+        {
           title: 'Projects needing action',
           link: `/client/project/action-needed`,
           icon: 'lucideSquareKanban',
@@ -145,6 +151,12 @@ export class SidebarComponent implements OnInit {
 
     if (currentUser.role === Role.PROJECT_MANAGER) {
       return [
+        {
+          title: 'Dashboard',
+          link: '/manager/dashboard',
+          icon: 'lucidePieChart',
+          keyword: 'manager/dashboard',
+        },
         {
           title: currentProject
             ? truncateText(`${currentProject.name} Board`, 20)
@@ -200,14 +212,21 @@ export class SidebarComponent implements OnInit {
       ].filter(
         (item) =>
           !(
-            ['projects', 'team', 'requirements'].includes(item.keyword) &&
-            !currentProject
+            ['projects', 'team', 'requirements', 'manager/dashboard'].includes(
+              item.keyword
+            ) && !currentProject
           )
       );
     }
 
     if (currentUser.role === Role.PRODUCT_MANAGER) {
       return [
+        {
+          title: 'Dashboard',
+          link: '/company/dashboard',
+          icon: 'lucidePieChart',
+          keyword: 'company/dashboard',
+        },
         {
           title: 'All Active Projects',
           link: `/company/projects`,

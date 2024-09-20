@@ -1,0 +1,186 @@
+<div class="w-full flex flex-col gap-4 p-8">
+  <h1 class="text-4xl font-semibold text-gray-800 dark:text-white">
+    Welcome again, {{ accountService.currentUser()?.name }}!
+  </h1>
+
+  <div class="w-full grid grid-cols-4 gap-2">
+    <div
+      class="flex flex-col w-full gap-4 h-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+    >
+      <p class="font-normal text-gray-700 dark:text-gray-400">
+        Total client count
+      </p>
+      <h5
+        class="self-center mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white"
+      >
+        {{ totalNumberOfClients() }}
+      </h5>
+    </div>
+
+    <div
+      class="flex flex-col gap-4 w-full h-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+    >
+      <p class="font-normal text-gray-700 dark:text-gray-400">
+        Total number of projects
+      </p>
+      <h5
+        class="self-center mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white"
+      >
+        {{ totalNumberOfProjects() }}
+      </h5>
+    </div>
+
+    <div
+      class="flex flex-col gap-4 w-full h-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+    >
+      <p class="font-normal text-gray-700 dark:text-gray-400">
+        Number of active projects
+      </p>
+      <h5
+        class="self-center mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white"
+      >
+        {{ totalNumberOfActiveProjects() }}
+      </h5>
+    </div>
+
+    <div
+      class="flex flex-col gap-4 w-full h-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+    >
+      <p class="font-normal text-gray-700 dark:text-gray-400">
+        Number of completed projects
+      </p>
+      <h5
+        class="self-center mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white"
+      >
+        {{ totalNumberOfCompletedProjects() }}
+      </h5>
+    </div>
+
+    <div
+      class="col-span-2 flex flex-col gap-4 w-full h-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+    >
+      <p class="font-normal text-gray-700 dark:text-gray-400">
+        Top performing managers
+      </p>
+      <div
+        class="w-full self-center mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white overflow-x-auto"
+      >
+        <table
+          class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
+        >
+          <thead
+            class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+          >
+            <tr>
+              <th scope="col" class="px-6 py-3">Manager name</th>
+              <th scope="col" class="px-6 py-3">
+                Number of projects completed
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (manager of allManagersSortedByNumberOfProjectsCompleted();
+            track $index) {
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+              <th
+                scope="row"
+                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+              >
+                {{ manager.name }} {{ manager.surname }}
+              </th>
+              <td class="px-6 py-4">
+                {{ numberOfProjectsCompletedByManager(manager) }}
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div
+      class="col-span-2 flex flex-col gap-4 w-full h-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+    >
+      <p class="font-normal text-gray-700 dark:text-gray-400">
+        Top performing developers
+      </p>
+      <div
+        class="w-full self-center mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white overflow-x-auto"
+      >
+        <table
+          class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
+        >
+          <thead
+            class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+          >
+            <tr>
+              <th scope="col" class="px-6 py-3">Developer name</th>
+              <th scope="col" class="px-6 py-3">Requirements completed</th>
+              <th scope="col" class="px-6 py-3">Quality rating</th>
+              <th scope="col" class="px-6 py-3">Number of ratings</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (developer of
+            allDevelopersSortedByNumberOfRequirementsCompleted(); track $index)
+            {
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+              <th
+                scope="row"
+                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+              >
+                {{ developer.name }} {{ developer.surname }}
+              </th>
+              <td class="px-6 py-4">
+                {{ numberOfRequirementsCompletedByDeveloper(developer) }}
+              </td>
+              <td class="px-6 py-4">
+                {{ developer.qualityRating }}
+              </td>
+              <td class="px-6 py-4">
+                {{ developer.ratingCount }}
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div
+      class="col-span-2 flex flex-col gap-4 w-full h-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+    >
+      <p class="font-normal text-gray-700 dark:text-gray-400">
+        Projects by client
+      </p>
+      <div>
+        <canvas
+          baseChart
+          height="400"
+          [data]="pieChartData()"
+          [type]="pieChartType"
+          [options]="pieChartOptions"
+        >
+        </canvas>
+      </div>
+    </div>
+
+    <div
+      class="col-span-2 flex flex-col gap-4 w-full h-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+    >
+      <p class="font-normal text-gray-700 dark:text-gray-400">
+        Projects shown by time left and number of requirements open
+      </p>
+      <div class="w-full">
+        <canvas
+          baseChart
+          height="400"
+          [data]="barChartData()"
+          [options]="barChartOptions"
+          [type]="barChartType"
+        >
+        </canvas>
+      </div>
+    </div>
+  </div>
+</div>

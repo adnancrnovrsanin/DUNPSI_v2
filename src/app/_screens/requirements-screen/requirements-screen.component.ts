@@ -1,5 +1,6 @@
 import {
   AfterContentInit,
+  ChangeDetectionStrategy,
   Component,
   computed,
   ElementRef,
@@ -40,6 +41,7 @@ import type { InstanceOptions } from 'flowbite';
   imports: [TextInputComponent, TextareaInputComponent, ReactiveFormsModule],
   templateUrl: './requirements-screen.component.html',
   styleUrl: './requirements-screen.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RequirementsScreenComponent implements OnInit {
   requirementsForEdit: WritableSignal<Requirement[]> = signal([]);

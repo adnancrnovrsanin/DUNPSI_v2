@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, WritableSignal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { User } from '../../_models/user';
 import { FileUploader, FileUploadModule } from 'ng2-file-upload';
@@ -18,6 +18,7 @@ import { initFlowbite } from 'flowbite';
   templateUrl: './images-screen.component.html',
   styleUrl: './images-screen.component.scss',
   viewProviders: [provideIcons({ lucideTrash2, lucideUpload })],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ImagesScreenComponent implements OnInit {
   id: WritableSignal<string | null> = signal(null);

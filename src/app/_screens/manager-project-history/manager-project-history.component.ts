@@ -1,4 +1,10 @@
-import { Component, OnInit, signal, WritableSignal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  signal,
+  WritableSignal,
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ProfileService } from '../../_services/profile.service';
 import {
@@ -16,6 +22,7 @@ import { initFlowbite } from 'flowbite';
   imports: [],
   templateUrl: './manager-project-history.component.html',
   styleUrl: './manager-project-history.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ManagerProjectHistoryComponent implements OnInit {
   id: WritableSignal<string | null> = signal(null);

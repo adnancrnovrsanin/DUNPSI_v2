@@ -1,4 +1,10 @@
-import { Component, OnInit, signal, WritableSignal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  signal,
+  WritableSignal,
+} from '@angular/core';
 import { Requirement } from '../../_models/requirement';
 import { ProjectService } from '../../_services/project.service';
 import { Router } from '@angular/router';
@@ -34,6 +40,7 @@ import { CreateRatingRequest } from '../../_models/rating';
   ],
   templateUrl: './unrated-requirements.component.html',
   styleUrl: './unrated-requirements.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UnratedRequirementsComponent implements OnInit {
   requirements: WritableSignal<Requirement[]> = signal([]);

@@ -4,7 +4,6 @@ import { LoginComponent } from './_screens/login/login.component';
 import { NotFoundComponent } from './_screens/not-found/not-found.component';
 import { ServerErrorComponent } from './_screens/server-error/server-error.component';
 import { authGuard } from './_guards/auth.guard';
-import { DashboardComponent } from './_screens/dashboard/dashboard.component';
 import { AppWrapperComponent } from './_layout/app-wrapper/app-wrapper.component';
 import { MessagesComponent } from './_screens/messages/messages.component';
 import { ProjectsRequestsComponent } from './_screens/projects-requests/projects-requests.component';
@@ -28,6 +27,9 @@ import { AdminCreateDevelopersComponent } from './_screens/admin-create-develope
 import { AdminCreateProjectManagersComponent } from './_screens/admin-create-project-managers/admin-create-project-managers.component';
 import { AdminCreateProductManagersComponent } from './_screens/admin-create-product-managers/admin-create-product-managers.component';
 import { UnratedRequirementsComponent } from './_screens/unrated-requirements/unrated-requirements.component';
+import { CompanyDashboardComponent } from './_screens/company-dashboard/company-dashboard.component';
+import { ManagerDashboardComponent } from './_screens/manager-dashboard/manager-dashboard.component';
+import { PendingProjectsComponent } from './_screens/pending-projects/pending-projects.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -38,9 +40,17 @@ export const routes: Routes = [
     canActivate: [authGuard],
     component: AppWrapperComponent,
     children: [
-      { path: 'dashboard/:id', component: DashboardComponent },
+      {
+        path: 'company/dashboard',
+        component: CompanyDashboardComponent,
+      },
+      {
+        path: 'manager/dashboard',
+        component: ManagerDashboardComponent,
+      },
       { path: 'messages', component: MessagesComponent },
       { path: 'messages/:email', component: ChatPageComponent },
+      { path: 'requests/pending', component: PendingProjectsComponent },
       { path: 'projects', component: ClientProjectsComponent },
       {
         path: 'client/project/action-needed',

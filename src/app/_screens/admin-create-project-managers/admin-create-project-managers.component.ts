@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, WritableSignal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, signal, WritableSignal } from '@angular/core';
 import {
   AbstractControl,
   FormControl,
@@ -22,6 +22,7 @@ import { initFlowbite } from 'flowbite';
   imports: [ReactiveFormsModule, TextInputComponent],
   templateUrl: './admin-create-project-managers.component.html',
   styleUrl: './admin-create-project-managers.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminCreateProjectManagersComponent implements OnInit {
   loading: WritableSignal<boolean> = signal(false);

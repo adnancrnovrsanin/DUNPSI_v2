@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { HomeNavbarComponent } from '../../_components/home-navbar/home-navbar.component';
 import { Router } from '@angular/router';
 import { initFlowbite } from 'flowbite';
@@ -9,6 +9,7 @@ import { initFlowbite } from 'flowbite';
   imports: [HomeNavbarComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent implements OnInit {
   constructor(private router: Router) {}

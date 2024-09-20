@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   OnDestroy,
   OnInit,
@@ -25,6 +26,7 @@ import { initFlowbite } from 'flowbite';
   imports: [ReactiveFormsModule, TextInputComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent implements OnInit, OnDestroy {
   validationErrors: WritableSignal<string[] | null> = signal(null);

@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   computed,
   ElementRef,
@@ -48,6 +49,7 @@ import { Router } from '@angular/router';
   templateUrl: './messages.component.html',
   styleUrl: './messages.component.scss',
   viewProviders: [provideIcons({ radixPlus, radixTrash })],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MessagesComponent implements OnInit {
   messages: WritableSignal<Message[]> = signal([]);

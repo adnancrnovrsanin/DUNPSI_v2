@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   OnInit,
@@ -26,6 +27,7 @@ import { initFlowbite } from 'flowbite';
   templateUrl: './team.component.html',
   styleUrl: './team.component.scss',
   viewProviders: [provideIcons({ lucidePlus })],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TeamComponent implements OnInit {
   id: WritableSignal<string | null> = signal(null);

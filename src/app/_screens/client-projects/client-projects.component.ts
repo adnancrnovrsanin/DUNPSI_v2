@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   OnInit,
@@ -7,7 +8,7 @@ import {
   WritableSignal,
 } from '@angular/core';
 import { SoftwareCompanyService } from '../../_services/software-company.service';
-import { Project } from '../../_models/softwareProject';
+import { Project, ProjectStatus } from '../../_models/softwareProject';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { lucideCalendar } from '@ng-icons/lucide';
 import {
@@ -22,6 +23,7 @@ import { ToastrService } from 'ngx-toastr';
 import { TextInputComponent } from '../../_forms/text-input/text-input.component';
 import { TextareaInputComponent } from '../../_forms/textarea-input/textarea-input.component';
 import { CreateInitialProjectRequest } from '../../_models/projectRequest';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-client-projects',
@@ -35,6 +37,7 @@ import { CreateInitialProjectRequest } from '../../_models/projectRequest';
   templateUrl: './client-projects.component.html',
   styleUrl: './client-projects.component.scss',
   viewProviders: [provideIcons({ lucideCalendar })],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ClientProjectsComponent implements OnInit {
   newProjectForm = new FormGroup({
@@ -62,13 +65,19 @@ export class ClientProjectsComponent implements OnInit {
     return datepicker.getDate();
   }
 
-  constructor(public softwareCompanyService: SoftwareCompanyService) {}
+  constructor(
+    public softwareCompanyService: SoftwareCompanyService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     initFlowbite();
   }
 
-  link(project: Project) {}
+  link(project: Project) {
+    if (project.status === ProjectStatus.COMPLETED) return;
+    this.router.navigate(['/projects', project.id]);
+  }
 
   submitProject() {
     const name = this.name.value ?? '';

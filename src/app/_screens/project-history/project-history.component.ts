@@ -1,4 +1,10 @@
-import { Component, OnInit, signal, WritableSignal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  signal,
+  WritableSignal,
+} from '@angular/core';
 import { ProjectsService } from '../../_services/projects.service';
 import {
   Project,
@@ -14,6 +20,7 @@ import { initFlowbite } from 'flowbite';
   imports: [],
   templateUrl: './project-history.component.html',
   styleUrl: './project-history.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectHistoryComponent implements OnInit {
   projectHistory: WritableSignal<Project[]> = signal([]);

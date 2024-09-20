@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, WritableSignal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { ProjectsService } from '../../_services/projects.service';
 import { ActivatedRoute } from '@angular/router';
 import { InitialProjectRequest } from '../../_models/projectRequest';
@@ -17,6 +17,7 @@ import { initFlowbite } from 'flowbite';
   imports: [NgClass, AvatarComponent],
   templateUrl: './project-manager-request-details.component.html',
   styleUrl: './project-manager-request-details.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectManagerRequestDetailsComponent implements OnInit {
   id: string | null = null;

@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, WritableSignal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, signal, WritableSignal } from '@angular/core';
 import {
   Project,
   projectStatusFromString,
@@ -14,6 +14,7 @@ import { initFlowbite } from 'flowbite';
   imports: [],
   templateUrl: './client-projects-action-needed.component.html',
   styleUrl: './client-projects-action-needed.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ClientProjectsActionNeededComponent implements OnInit {
   projects: WritableSignal<Project[]> = signal([]);

@@ -1,4 +1,8 @@
-import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
+import {
+  ApplicationConfig,
+  importProvidersFrom,
+  provideZoneChangeDetection,
+} from '@angular/core';
 import { provideRouter, withHashLocation } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -15,6 +19,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { errorInterceptor } from './_interceptors/error.interceptor';
 import { jwtInterceptor } from './_interceptors/jwt.interceptor';
 import { loadingInterceptor } from './_interceptors/loading.interceptor';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -33,5 +38,6 @@ export const appConfig: ApplicationConfig = {
       type: 'ball-spin',
     }),
     provideAnimationsAsync(),
+    provideCharts(withDefaultRegisterables()),
   ],
 };

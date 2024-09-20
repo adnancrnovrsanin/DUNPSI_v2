@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, WritableSignal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { AdminService } from '../../_services/admin.service';
 import { User } from '../../_models/user';
 import { FormsModule } from '@angular/forms';
@@ -11,6 +11,7 @@ import { initFlowbite } from 'flowbite';
   imports: [FormsModule],
   templateUrl: './admin-users.component.html',
   styleUrl: './admin-users.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminUsersComponent implements OnInit {
   users: WritableSignal<User[]> = signal([]);

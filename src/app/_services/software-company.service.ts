@@ -9,7 +9,11 @@ import {
   ProjectDto,
   projectStatusFromString,
 } from '../_models/softwareProject';
-import { CreateInitialProjectRequest } from '../_models/projectRequest';
+import {
+  CreateInitialProjectRequest,
+  InitialProjectRequest,
+  InitialProjectRequestDto,
+} from '../_models/projectRequest';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
@@ -113,6 +117,12 @@ export class SoftwareCompanyService {
           this.loading.set(false);
         },
       });
+  }
+
+  getInitialProjectRequests(companyId: string) {
+    return this.http.get<InitialProjectRequestDto[]>(
+      this.baseUrl + `softwarecompany/${companyId}/requests`
+    );
   }
 
   clear() {

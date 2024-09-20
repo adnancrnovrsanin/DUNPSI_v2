@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, WritableSignal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { ProjectsService } from '../../_services/projects.service';
 import { ActivatedRoute } from '@angular/router';
 import { ProjectCreateDto } from '../../_models/softwareProject';
@@ -11,6 +11,7 @@ import { initFlowbite } from 'flowbite';
   imports: [],
   templateUrl: './project-request-details.component.html',
   styleUrl: './project-request-details.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectRequestDetailsComponent implements OnInit {
   id: string | null = null;

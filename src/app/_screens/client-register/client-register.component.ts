@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, WritableSignal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { CreateSoftwareCompanyCredentials } from '../../_models/softwareCompany';
 import {
   AbstractControl,
@@ -20,6 +20,7 @@ import { initFlowbite } from 'flowbite';
   imports: [ReactiveFormsModule, TextInputComponent],
   templateUrl: './client-register.component.html',
   styleUrl: './client-register.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ClientRegisterComponent implements OnInit {
   validationErrors: WritableSignal<string[] | null> = signal(null);

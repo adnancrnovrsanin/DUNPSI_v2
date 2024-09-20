@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { BoardComponent } from '../../_components/board/board.component';
 import { initFlowbite } from 'flowbite';
 
@@ -8,6 +8,7 @@ import { initFlowbite } from 'flowbite';
   imports: [BoardComponent],
   templateUrl: './project-page.component.html',
   styleUrl: './project-page.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectPageComponent implements OnInit {
   constructor() {}

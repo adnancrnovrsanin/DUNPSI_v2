@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, WritableSignal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { TextInputComponent } from '../../_forms/text-input/text-input.component';
 import {
   AbstractControl,
@@ -19,6 +19,7 @@ import { initFlowbite } from 'flowbite';
   imports: [TextInputComponent, ReactiveFormsModule],
   templateUrl: './admin-create-developers.component.html',
   styleUrl: './admin-create-developers.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminCreateDevelopersComponent implements OnInit {
   loading: WritableSignal<boolean> = signal(false);
